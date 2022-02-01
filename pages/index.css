@@ -1,0 +1,10 @@
+@import url(../vendor/normalize.css);
+
+/* шрифты */
+@import url(../vendor/fonts/inter.css);
+
+@import url(../blocks/page/page.css);
+
+/* footer */
+@import url(../blocks/footer/footer.css);
+@import url(../blocks/footer/__copyright/footer__copyright.css);
