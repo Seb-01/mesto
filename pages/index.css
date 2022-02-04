@@ -5,6 +5,22 @@
 
 @import url(../blocks/page/page.css);
 
+/* header */
+@import url(../blocks/header/header.css);
+@import url(../blocks/header/__logo/header__logo.css);
+
+/* profile */
+@import url(../blocks/profile/profile.css);
+@import url(../blocks/profile/__avatar/profile__avatar.css);
+@import url(../blocks/profile/__add-buton/profile__add-button.css);
+
+/* profile-info */
+@import url(../blocks/profile/profile-info/profile-info.css);
+@import url(../blocks/profile/profile-info/__wrapper/profile-info__wrapper.css);
+@import url(../blocks/profile/profile-info/__title/profile-info__title.css);
+@import url(../blocks/profile/profile-info/__subtitle/profile-info__subtitle.css);
+@import url(../blocks/profile/profile-info/__edit-button/profile-info__edit-button.css);
+
 /* footer */
 @import url(../blocks/footer/footer.css);
 @import url(../blocks/footer/__copyright/footer__copyright.css);
