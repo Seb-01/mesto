@@ -1,0 +1,8 @@
+.popup__person-info {
+  border: none;
+  padding: 0;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

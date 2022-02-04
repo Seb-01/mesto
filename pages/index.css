@@ -20,6 +20,13 @@
 @import url(../blocks/profile/profile-info/__title/profile-info__title.css);
 @import url(../blocks/profile/profile-info/__subtitle/profile-info__subtitle.css);
 @import url(../blocks/profile/profile-info/__edit-button/profile-info__edit-button.css);
+@import url(../blocks/popup/__close-button/popup__close-button.css);
+
+/* popup */
+@import url(../blocks/popup/popup.css);
+@import url(../blocks/popup/_opened/popup_opened.css);
+@import url(../blocks/popup/__container/popup__container.css);
+@import url(../blocks/popup/__person-info/popup__person-info.css);
 
 /* footer */
 @import url(../blocks/footer/footer.css);
