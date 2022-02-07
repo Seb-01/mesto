@@ -34,22 +34,27 @@
         <button class="profile__add-button"></button>
       </section>
 
-      <div class="popup popup_opened">
+      <section class="popup">
         <form class="popup__container">
-          <h1>Редактировать профиль</h1>
+          <h1 class="popup__title">Редактировать профиль</h1>
           <fieldset class="popup__person-info">
-            <input type="text" class="popup__name" />
-            <input type="text" class="popup__about-oneself" />
+            <div class="popup__name-wrapper">
+              <input type="text" class="popup__name" value="" />
+            </div>
+            <div class="popup__about-oneself-wrapper">
+              <input type="text" class="popup__about-oneself" value="" />
+            </div>
           </fieldset>
           <button class="popup__save-button">Сохранить</button>
-          <button class="popup__close-button">Сохранить</button>
+          <button class="popup__close-button"></button>
         </form>
-      </div>
+      </section>
     </main>
 
     <!-- footer -->
     <div class="footer">
       <p class="footer__copyright">&copy; 2022 Mesto Russia</p>
     </div>
+    <script src="./scripts/index.js"></script>
   </body>
 </html>
