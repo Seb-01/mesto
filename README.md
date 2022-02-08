@@ -27,7 +27,7 @@
 
 Здесь можно посмотреть как выглядит сайт:
 
-[GitHub Pages](https://www.yandex.ru "Yandex Practicum!")
+[GitHub Pages](https://seb-01.github.io/mesto/)
 
 ### Картинки
 
