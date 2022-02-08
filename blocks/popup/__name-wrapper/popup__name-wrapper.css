@@ -1,9 +1,14 @@
 .popup__name-wrapper {
-  max-width: 358px;
-  min-width: 320px;
+  width: 358px;
   height: 26px;
   display: flex;
   flex-direction: column;
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  margin: 54px auto 0;
+  margin-top: 54px;
+}
+
+@media screen and (max-width: 767px) {
+  .popup__name-wrapper {
+    width: 238px;
+  }
 }
