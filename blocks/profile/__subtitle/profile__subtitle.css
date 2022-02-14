@@ -1,11 +1,11 @@
-.profile-info__title {
+.profile__subtitle {
   max-width: 336px;
-  margin: 0 18px 0 0;
+  margin: 12px 0 0;
   font-family: "Inter", Arial, sans-serif;
   font-style: normal;
-  font-weight: 500;
-  font-size: 42px;
-  line-height: 48px;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
   color: #ffffff;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -13,11 +13,10 @@
 }
 
 @media screen and (max-width: 767px) {
-  .profile-info__title {
-    font-family: "Inter", Arial, sans-serif;
-    font-size: 27px;
-    line-height: 33px;
+  .profile__subtitle {
+    margin: 10px 0 0;
+    font-size: 14px;
+    line-height: 17px;
     text-align: center;
-    margin: 0 10px 0 0;
   }
 }

@@ -8,13 +8,14 @@
   margin: 48px auto 37px;
   background: #000000;
   border-radius: 2px;
-  font-family: Inter;
+  font-family: "Inter", Arial, sans-serif;
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
   line-height: 22px;
   text-align: center;
   color: #ffffff;
+  display: block;
 }
 
 .popup__save-button:hover {
@@ -25,5 +26,8 @@
   .popup__save-button {
     width: 238px;
     height: 46px;
+    font-size: 14px;
+    line-height: 17px;
+    margin: 45px auto 25px;
   }
 }

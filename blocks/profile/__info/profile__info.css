@@ -1,9 +1,9 @@
-.profile-info {
+.profile__info {
   margin: 0 auto 0 30px;
 }
 
 @media screen and (max-width: 767px) {
-  .profile-info {
+  .profile__info {
     max-width: 320px;
     margin: auto;
   }

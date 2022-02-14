@@ -4,26 +4,21 @@ const popupElem = document.querySelector('.popup');
 const formElement = document.querySelector('.popup__container');
 
 // кнопка редактировать в профиле
-const profileEditButton = document.querySelector('.profile-info__edit-button');
+const profileEditButton = document.querySelector('.profile__edit-button');
 // кнопка закрыть popup
 const popupCloseButton = document.querySelector('.popup__close-button');
-// кнопка сохранить popup
-const popupSaveButton = document.querySelector('.popup__save-button');
-
 
 // поля input в DOM
-let nameInput = document.querySelector('.popup__name');
-let jobInput = document.querySelector('.popup__about-oneself');
+let nameInput = document.querySelector('.popup__input_field_name');
+let jobInput = document.querySelector('.popup__input_field_job');
 
 // поля в профиле в DOM
-let title = document.querySelector('.profile-info__title');
-let subtitle = document.querySelector('.profile-info__subtitle');
+let title = document.querySelector('.profile__title');
+let subtitle = document.querySelector('.profile__subtitle');
 
 
 // функция поднимаем popup
 function showPopup() {
-  console.log('Мы кликнули по кнопке ".profile-info__edit-button"');
-
   // Чтобы попап открывался, добавляйте ему модификатор popup_opened с одним-единственным правилом.
   // Правило должно изменять значение свойства display на block или flex.
 
@@ -50,10 +45,8 @@ function saveProfile(evt) {
    // Вставьте новые значения с помощью textContent
   title.textContent=nameInput.value;
   subtitle.textContent=jobInput.value;
-
-  // Чтобы закрыть попап, удаляйте у него модификатор popup_opened
-  // манипулируем с классами элемента - убираем модификатор для "вспытия" окна
-  popupElem.classList.remove('popup_opened');
+  // Закрываем окно:
+  closePopup();
 }
 
 // назначаем событие - открыть popup

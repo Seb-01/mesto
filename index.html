@@ -22,111 +22,123 @@
         <img
           class="profile__avatar"
           src="./images/photo_j_i_kusto.jpg"
-          alt="Фото Ж.И.Кусто"
+          alt="Аватар пользователя"
         />
 
-        <div class="profile-info">
-          <div class="profile-info__wrapper">
-            <h1 class="profile-info__title">Жак-Ив-Кусто</h1>
-            <button class="profile-info__edit-button"></button>
+        <div class="profile__info">
+          <div class="profile__wrapper">
+            <h1 class="profile__title">Жак-Ив-Кусто</h1>
+            <button class="profile__edit-button" type="button"></button>
           </div>
-          <p class="profile-info__subtitle">Исследователь океана</p>
+          <p class="profile__subtitle">Исследователь океана</p>
         </div>
-        <button class="profile__add-button"></button>
+        <button class="profile__add-button" type="button"></button>
       </section>
 
       <!-- popup -->
-      <section class="popup">
-        <form class="popup__container">
-          <h1 class="popup__title">Редактировать профиль</h1>
-          <fieldset class="popup__person-info">
-            <div class="popup__name-wrapper">
-              <input type="text" class="popup__name" value="" />
-            </div>
-            <div class="popup__about-oneself-wrapper">
-              <input type="text" class="popup__about-oneself" value="" />
-            </div>
-          </fieldset>
-          <button class="popup__save-button">Сохранить</button>
-          <button class="popup__close-button"></button>
-        </form>
+      <div class="popup">
+        <div class="popup__container">
+          <form name="profile-edit">
+            <h2 class="popup__title">Редактировать профиль</h2>
+            <fieldset class="popup__info">
+              <input
+                type="text"
+                class="popup__input popup__input_field_name"
+                value=""
+                name="name"
+                placeholder="Введите имя"
+                required
+              />
+              <input
+                type="text"
+                class="popup__input popup__input_field_job"
+                value=""
+                name="job"
+                placeholder="Введите род занятий"
+                required
+              />
+            </fieldset>
+            <button class="popup__save-button" type="submit">Сохранить</button>
+          </form>
+          <button class="popup__close-button" type="button"></button>
+        </div>
+      </div>
+
+      <!-- elements -->
+      <section class="elements">
+        <article class="elements__card">
+          <img
+            class="elements__photo"
+            src="./images/kirill-pershin-1088404-unsplash.jpg"
+            alt="Карачаевск"
+          />
+          <div class="elements__wrapper">
+            <h2 class="elements__title">Карачаевск</h2>
+            <button class="elements__like-button" type="button"></button>
+          </div>
+        </article>
+        <article class="elements__card">
+          <img
+            class="elements__photo"
+            src="./images/kirill-pershin-1404681-unsplash.jpg"
+            alt="Гора Эльбрус"
+          />
+          <div class="elements__wrapper">
+            <h2 class="elements__title">Гора Эльбрус</h2>
+            <button class="elements__like-button" type="button"></button>
+          </div>
+        </article>
+        <article class="elements__card">
+          <img
+            class="elements__photo"
+            src="./images/kirill-pershin-1556355-unsplash.jpg"
+            alt="Домбай"
+          />
+          <div class="elements__wrapper">
+            <h2 class="elements__title">Домбай</h2>
+            <button class="elements__like-button" type="button"></button>
+          </div>
+        </article>
+        <article class="elements__card">
+          <img
+            class="elements__photo"
+            src="./images/kirill-pershin-1404681-unsplash.jpg"
+            alt="Гора Эльбрус"
+          />
+          <div class="elements__wrapper">
+            <h2 class="elements__title">Гора Эльбрус</h2>
+            <button class="elements__like-button" type="button"></button>
+          </div>
+        </article>
+        <article class="elements__card">
+          <img
+            class="elements__photo"
+            src="./images/kirill-pershin-1556355-unsplash.jpg"
+            alt="Домбай"
+          />
+          <div class="elements__wrapper">
+            <h2 class="elements__title">Домбай</h2>
+            <button class="elements__like-button" type="button"></button>
+          </div>
+        </article>
+        <article class="elements__card">
+          <img
+            class="elements__photo"
+            src="./images/kirill-pershin-1088404-unsplash.jpg"
+            alt="Карачаево-Черкесск"
+          />
+          <div class="elements__wrapper">
+            <h2 class="elements__title">Карачаево-Черкесск</h2>
+            <button class="elements__like-button" type="button"></button>
+          </div>
+        </article>
       </section>
     </main>
 
-    <!-- elements -->
-    <section class="elements">
-      <div class="elements__item">
-        <img
-          class="elements__photo"
-          src="./images/kirill-pershin-1088404-unsplash.jpg"
-          alt="Карачаевск"
-        />
-        <div class="elements__wrapper">
-          <h1 class="elements__title">Карачаевск</h1>
-          <button class="elements__like-button"></button>
-        </div>
-      </div>
-      <div class="elements__item">
-        <img
-          class="elements__photo"
-          src="./images/kirill-pershin-1404681-unsplash.jpg"
-          alt="Гора Эльбрус"
-        />
-        <div class="elements__wrapper">
-          <h1 class="elements__title">Гора Эльбрус</h1>
-          <button class="elements__like-button"></button>
-        </div>
-      </div>
-      <div class="elements__item">
-        <img
-          class="elements__photo"
-          src="./images/kirill-pershin-1556355-unsplash.jpg"
-          alt="Домбай"
-        />
-        <div class="elements__wrapper">
-          <h1 class="elements__title">Домбай</h1>
-          <button class="elements__like-button"></button>
-        </div>
-      </div>
-      <div class="elements__item">
-        <img
-          class="elements__photo"
-          src="./images/kirill-pershin-1404681-unsplash.jpg"
-          alt="Гора Эльбрус"
-        />
-        <div class="elements__wrapper">
-          <h1 class="elements__title">Гора Эльбрус</h1>
-          <button class="elements__like-button"></button>
-        </div>
-      </div>
-      <div class="elements__item">
-        <img
-          class="elements__photo"
-          src="./images/kirill-pershin-1556355-unsplash.jpg"
-          alt="Домбай"
-        />
-        <div class="elements__wrapper">
-          <h1 class="elements__title">Домбай</h1>
-          <button class="elements__like-button"></button>
-        </div>
-      </div>
-      <div class="elements__item">
-        <img
-          class="elements__photo"
-          src="./images/kirill-pershin-1088404-unsplash.jpg"
-          alt="Карачаево-Черкесск"
-        />
-        <div class="elements__wrapper">
-          <h1 class="elements__title">Карачаево-Черкесск</h1>
-          <button class="elements__like-button"></button>
-        </div>
-      </div>
-    </section>
-
     <!-- footer -->
-    <div class="footer">
+    <footer class="footer">
       <p class="footer__copyright">&copy; 2022 Mesto Russia</p>
-    </div>
+    </footer>
     <script src="./scripts/index.js"></script>
   </body>
 </html>

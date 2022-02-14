@@ -1,14 +1,13 @@
-.popup__person-info {
+.popup__info {
   border: none;
   padding: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   margin: 0 0 0 36px;
 }
 
 @media screen and (max-width: 767px) {
-  .popup__person-info {
+  .popup__info {
     margin: 0 0 0 22px;
   }
 }
