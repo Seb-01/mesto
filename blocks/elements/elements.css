@@ -12,7 +12,7 @@
 
 @media screen and (max-width: 1023px) {
   .elements {
-    width: 300px;
+    width: 584px;
     /* Будет создано 2 колонки */
     grid-template-columns: repeat(2, 282px);
     /* Будет создано 3 ряда */

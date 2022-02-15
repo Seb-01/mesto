@@ -1,7 +1,7 @@
 // получаем popup
 const popupElem = document.querySelector('.popup');
 // форма popup
-const formElement = document.querySelector('.popup__container');
+const formElement = document.querySelector('.profile__form');
 
 // кнопка редактировать в профиле
 const profileEditButton = document.querySelector('.profile__edit-button');
