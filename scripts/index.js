@@ -1,3 +1,64 @@
+// контейнер с карточками
+const elemContainer = document.querySelector('.elements');
+
+// карточки при загрузке страницы:
+const initialCards = [
+  {
+    name: 'Архыз',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
+  },
+  {
+    name: 'Челябинская область',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
+  },
+  {
+    name: 'Иваново',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
+  },
+  {
+    name: 'Камчатка',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
+  },
+  {
+    name: 'Холмогорский район',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
+  },
+  {
+    name: 'Байкал',
+    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
+  }
+];
+
+
+// При загрузке на странице должно быть 6 карточек. Добавляем!
+loadInitialCards(initialCards);
+
+
+//Функция для формирования карточек при загрузке страницы:
+function loadInitialCards(initialCards) {
+  // получаем содержание шаблона
+  const cardTemplate = document.querySelector('#card-template').content;
+
+
+  for (let i=0; i < initialCards.length; i++) {
+  // ищем в шаблоне нужный элемент и клонируем его
+  const cardElement = cardTemplate.querySelector('.elements__card').cloneNode(true);
+
+  // ИЗМЕНЯЕМ атрибуты элемента значениями из массива:
+  photoElem = cardElement.querySelector('.elements__photo');
+  photoElem.setAttribute('src', initialCards[i].link);
+  photoElem.setAttribute('alt', initialCards[i].name);
+
+  titleElem = cardElement.querySelector('.elements__title');
+  titleElem.textContent = initialCards[i].name;
+
+
+  // добавялем карточку в конец секции elements
+  elemContainer.append(cardElement);
+  }
+}
+
+
 // получаем popup
 const popupElem = document.querySelector('.popup');
 // форма popup
