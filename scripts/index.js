@@ -97,8 +97,8 @@ function loadCard(name, link) {
   titleElem = cardElement.querySelector('.elements__title');
   titleElem.textContent = name;
 
-  // добавялем карточку в конец секции elements
-  elemContainer.append(cardElement);
+  // добавялем карточку в начало секции elements
+  elemContainer.prepend(cardElement);
 }
 
 // открыть форму редактирования профиля
