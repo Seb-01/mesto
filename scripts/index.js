@@ -36,6 +36,11 @@ const popupEditProfile = document.querySelector('.popup.popup_target_profile');
 // получаем popup формы добавления карточки
 const popupAddItem = document.querySelector('.popup.popup_target_add-item');
 
+//получаем форму редактирования профиля
+const editProfileForm = document.querySelector('.popup__edit-profile-form');
+//получаем форму добавления карточки
+const addItemForm = document.querySelector('.popup__add-item-form');
+
 // кнопка редактировать профиль
 const profileEditButton = document.querySelector('.profile__edit-button');
 // кнопка добавить карточку
@@ -154,12 +159,11 @@ function saveNewItem(evt) {
   // Эта строчка отменяет стандартную отправку формы, т.к. мы можем определить свою логику отправки.
   evt.preventDefault();
 
-  if(evt.target.classList.value === 'popup__save-button')
-    loadCard(mestoNameInput.value, mestoLinkInput.value);
+  loadCard(mestoNameInput.value, mestoLinkInput.value);
 }
 
-
 // Работаем:
+/*************************************************************************************/
 
 // При загрузке на странице должно быть 6 карточек. Добавляем!
 loadInitialCards(initialCards);
@@ -173,6 +177,6 @@ profileAddButton.addEventListener('click', showAddItemForm);
 popupEditProfile.addEventListener('click', closePopup);
 popupAddItem.addEventListener('click', closePopup);
 
-// назначаем событие - сохранить данные формы
-popupEditProfile.addEventListener('click', saveProfile);
-popupAddItem.addEventListener('click', saveNewItem);
+// обработчик submit в формах
+editProfileForm.addEventListener('submit', saveProfile);
+addItemForm.addEventListener('submit', saveNewItem);
