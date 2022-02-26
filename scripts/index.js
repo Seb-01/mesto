@@ -1,3 +1,5 @@
+// Здесь объявления констант
+
 // контейнер с карточками
 const elemContainer = document.querySelector('.elements');
 
@@ -29,10 +31,30 @@ const initialCards = [
   }
 ];
 
+// получаем popup формы редактирования профиля
+const popupEditProfile = document.querySelector('.popup.popup_target_profile');
+// получаем popup формы добавления карточки
+const popupAddItem = document.querySelector('.popup.popup_target_add-item');
 
-// При загрузке на странице должно быть 6 карточек. Добавляем!
-loadInitialCards(initialCards);
+// кнопка редактировать профиль
+const profileEditButton = document.querySelector('.profile__edit-button');
+// кнопка добавить карточку
+const profileAddButton = document.querySelector('.profile__add-button');
 
+// поля input формы редактирования профиля в DOM
+let nameInput = document.querySelector('.popup__input_field_name');
+let jobInput = document.querySelector('.popup__input_field_job');
+
+// поля в профиле формы редактирования профиля в DOM
+let title = document.querySelector('.profile__title');
+let subtitle = document.querySelector('.profile__subtitle');
+
+// поля input формы для добавления карточки в DOM
+let mestoNameInput = document.querySelector('.popup__input_field_mesto-name');
+let mestoLinkInput = document.querySelector('.popup__input_field_link');
+
+
+// Здесь объявления функций:
 
 //Функция для формирования карточек при загрузке страницы:
 function loadInitialCards(initialCards) {
@@ -58,28 +80,29 @@ function loadInitialCards(initialCards) {
   }
 }
 
+//Функция для добавления карточки:
+//Сократить код! -------------------------------------------------
+function loadCard(name, link) {
+  // получаем содержание шаблона
+  const cardTemplate = document.querySelector('#card-template').content;
 
-// получаем popup
-const popupElem = document.querySelector('.popup');
-// форма popup
-const formElement = document.querySelector('.popup__form');
+  // ищем в шаблоне нужный элемент и клонируем его
+  const cardElement = cardTemplate.querySelector('.elements__card').cloneNode(true);
 
-// кнопка редактировать в профиле
-const profileEditButton = document.querySelector('.profile__edit-button');
-// кнопка закрыть popup
-const popupCloseButton = document.querySelector('.popup__close-button');
+  // ИЗМЕНЯЕМ атрибуты элемента значениями аргументами:
+  photoElem = cardElement.querySelector('.elements__photo');
+  photoElem.setAttribute('src', link);
+  photoElem.setAttribute('alt', name);
 
-// поля input в DOM
-let nameInput = document.querySelector('.popup__input_field_name');
-let jobInput = document.querySelector('.popup__input_field_job');
+  titleElem = cardElement.querySelector('.elements__title');
+  titleElem.textContent = name;
 
-// поля в профиле в DOM
-let title = document.querySelector('.profile__title');
-let subtitle = document.querySelector('.profile__subtitle');
+  // добавялем карточку в конец секции elements
+  elemContainer.append(cardElement);
+}
 
-
-// функция поднимаем popup
-function showPopup() {
+// открыть форму редактирования профиля
+function showEditProfileForm() {
   // Чтобы попап открывался, добавляйте ему модификатор popup_opened с одним-единственным правилом.
   // Правило должно изменять значение свойства display на block или flex.
 
@@ -88,14 +111,32 @@ function showPopup() {
   nameInput.value = title.textContent;
   jobInput.value =subtitle.textContent;
 
-  // добавялем модификатор для "вспытия" окна
+  // поднимаем попап
+  showPopup(popupEditProfile);
+}
+
+// открыть форму добавления новой карточки
+function showAddItemForm(evt) {
+
+  // поднимаем попап
+  showPopup(popupAddItem);
+}
+
+// поднять popup
+function showPopup(popupElem) {
+  // Чтобы попап открывался, добавляйте ему модификатор popup_opened с одним-единственным правилом.
+  // Правило должно изменять значение свойства display на block или flex.
   popupElem.classList.add('popup_opened');
 }
 
-// функция закрываем popup
-function closePopup() {
+// закрыть popup
+function closePopup(evt) {
   // Чтобы закрыть попап, убираем модификатор для "вспытия" окна
-  popupElem.classList.remove('popup_opened');
+  // но вначале нужно понять, о каком кнопке идет речь:
+  // всплытие событий это обеспечит нам: исли кликнули на соответствующую кнопку!
+
+  if(evt.target.classList.value === 'popup__close-button' || evt.target.classList.value === 'popup__save-button')
+    this.classList.remove('popup_opened');
 }
 
 // функция обновление инфо в профиле
@@ -106,13 +147,32 @@ function saveProfile(evt) {
    // Вставьте новые значения с помощью textContent
   title.textContent=nameInput.value;
   subtitle.textContent=jobInput.value;
-  // Закрываем окно:
-  closePopup();
 }
 
-// назначаем событие - открыть popup
-profileEditButton.addEventListener('click', showPopup);
-// назначаем событие - Закрыть popup
-popupCloseButton.addEventListener('click', closePopup);
-// Прикрепляем обработчик к форме: он будет следить за событием “submit” - «отправка»
-formElement.addEventListener('submit', saveProfile);
+// функция добавления карточки!
+function saveNewItem(evt) {
+  // Эта строчка отменяет стандартную отправку формы, т.к. мы можем определить свою логику отправки.
+  evt.preventDefault();
+
+  if(evt.target.classList.value === 'popup__save-button')
+    loadCard(mestoNameInput.value, mestoLinkInput.value);
+}
+
+
+// Работаем:
+
+// При загрузке на странице должно быть 6 карточек. Добавляем!
+loadInitialCards(initialCards);
+
+// назначаем событие - редактируем профиль
+profileEditButton.addEventListener('click', showEditProfileForm);
+// назначаем событие - добавляем карточку
+profileAddButton.addEventListener('click', showAddItemForm);
+
+// назначаем событие - закрыть popup
+popupEditProfile.addEventListener('click', closePopup);
+popupAddItem.addEventListener('click', closePopup);
+
+// назначаем событие - сохранить данные формы
+popupEditProfile.addEventListener('click', saveProfile);
+popupAddItem.addEventListener('click', saveNewItem);
