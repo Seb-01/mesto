@@ -65,7 +65,7 @@ let mestoLinkInput = document.querySelector('.popup__input_field_link');
 function loadInitialCards(initialCards) {
   // получаем содержание шаблона
   const cardTemplate = document.querySelector('#card-template').content;
-  let likeButtonElem;
+  let likeButtonElem, trashButton;
 
 
   for (let i=0; i < initialCards.length; i++) {
@@ -87,6 +87,8 @@ function loadInitialCards(initialCards) {
   //добавляем обработчик события лайку
   likeButtonElem = cardElement.querySelector('.elements__like-button');
   likeButtonElem.addEventListener('click', likeCard);
+  trashButton = cardElement.querySelector('.elements__trash-button');
+  trashButton.addEventListener('click', deleteCard);
 
   }
 }
@@ -110,12 +112,25 @@ function loadCard(name, link) {
 
   // добавялем карточку в начало секции elements
   elemContainer.prepend(cardElement);
+
+  //добавляем обработчик события лайку
+  const likeButtonElem = cardElement.querySelector('.elements__like-button');
+  likeButtonElem.addEventListener('click', likeCard);
+  const trashButton = cardElement.querySelector('.elements__trash-button');
+  trashButton.addEventListener('click', deleteCard);
 }
 
 // лайкнуть!
 function likeCard(evt)
 {
   evt.target.classList.toggle('elements__like-button_active');
+}
+
+// удалить карту!
+function deleteCard(evt)
+{
+  //evt.target.classList.toggle('elements__like-button_active');
+  evt.target.closest('.elements__card').remove();
 }
 
 // открыть форму редактирования профиля
