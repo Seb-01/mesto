@@ -65,6 +65,7 @@ let mestoLinkInput = document.querySelector('.popup__input_field_link');
 function loadInitialCards(initialCards) {
   // получаем содержание шаблона
   const cardTemplate = document.querySelector('#card-template').content;
+  let likeButtonElem;
 
 
   for (let i=0; i < initialCards.length; i++) {
@@ -82,6 +83,11 @@ function loadInitialCards(initialCards) {
 
   // добавялем карточку в конец секции elements
   elemContainer.append(cardElement);
+
+  //добавляем обработчик события лайку
+  likeButtonElem = cardElement.querySelector('.elements__like-button');
+  likeButtonElem.addEventListener('click', likeCard);
+
   }
 }
 
@@ -104,6 +110,12 @@ function loadCard(name, link) {
 
   // добавялем карточку в начало секции elements
   elemContainer.prepend(cardElement);
+}
+
+// лайкнуть!
+function likeCard(evt)
+{
+  evt.target.classList.toggle('elements__like-button_active');
 }
 
 // открыть форму редактирования профиля
@@ -180,3 +192,4 @@ popupAddItem.addEventListener('click', closePopup);
 // обработчик submit в формах
 editProfileForm.addEventListener('submit', saveProfile);
 addItemForm.addEventListener('submit', saveNewItem);
+
