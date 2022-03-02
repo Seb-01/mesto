@@ -1,5 +1,17 @@
+@keyframes rise-popup {
+  from {
+    /* показываем плавно*/
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 .popup_opened {
   display: flex;
+  visibility: visible;
   justify-content: center;
   align-items: center;
+  animation: rise-popup 300ms;
 }
