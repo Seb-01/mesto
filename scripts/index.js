@@ -35,6 +35,8 @@ const initialCards = [
 const popupEditProfile = document.querySelector('.popup.popup_target_profile');
 // получаем popup формы добавления карточки
 const popupAddItem = document.querySelector('.popup.popup_target_add-item');
+// получаем popup картинки
+const popupPictureView = document.querySelector('.popup.popup_target_picture-view');
 
 //получаем форму редактирования профиля
 const editProfileForm = document.querySelector('.popup__edit-profile-form');
@@ -65,7 +67,7 @@ let mestoLinkInput = document.querySelector('.popup__input_field_link');
 function loadInitialCards(initialCards) {
   // получаем содержание шаблона
   const cardTemplate = document.querySelector('#card-template').content;
-  let likeButtonElem, trashButton;
+  let likeButtonElem, trashButton, photoElem;
 
 
   for (let i=0; i < initialCards.length; i++) {
@@ -87,8 +89,12 @@ function loadInitialCards(initialCards) {
   //добавляем обработчик события лайку
   likeButtonElem = cardElement.querySelector('.elements__like-button');
   likeButtonElem.addEventListener('click', likeCard);
+  //добавляем обработчик события trash
   trashButton = cardElement.querySelector('.elements__trash-button');
   trashButton.addEventListener('click', deleteCard);
+  //добавляем обработчик события показать картинку
+  photoElem= cardElement.querySelector('.elements__photo');
+  photoElem.addEventListener('click', showPicture);
 
   }
 }
@@ -116,6 +122,7 @@ function loadCard(name, link) {
   //добавляем обработчик события лайку
   const likeButtonElem = cardElement.querySelector('.elements__like-button');
   likeButtonElem.addEventListener('click', likeCard);
+  //добавляем обработчик события trash
   const trashButton = cardElement.querySelector('.elements__trash-button');
   trashButton.addEventListener('click', deleteCard);
 }
@@ -129,8 +136,27 @@ function likeCard(evt)
 // удалить карту!
 function deleteCard(evt)
 {
-  //evt.target.classList.toggle('elements__like-button_active');
+  // удаляем карту и ближайшего предка с заданным классом
   evt.target.closest('.elements__card').remove();
+}
+
+// показать карточку
+function showPicture(evt)
+{
+  // здесь нужно определить: вертикальный или горизонтальный popup
+
+  // поднимаем попап
+  popupPictureView.classList.add('popup_opened');
+
+  // получить адрес картинки карточки (через атрибуты src="" alt="")
+  const pictureTo = popupPictureView.querySelector('.popup__picture');
+  pictureTo.setAttribute('src', evt.target.getAttribute('src'));
+  pictureTo.setAttribute('alt', evt.target.getAttribute('alt'));
+
+  // получить elements__title карточки (h2)
+  const titleFrom = evt.target.closest('.elements__card').querySelector('.elements__title');
+  const titleTo = popupPictureView.querySelector('.popup__figure-caption');
+  titleTo.textContent = titleFrom.textContent;
 }
 
 // открыть форму редактирования профиля
@@ -203,6 +229,7 @@ profileAddButton.addEventListener('click', showAddItemForm);
 // назначаем событие - закрыть popup
 popupEditProfile.addEventListener('click', closePopup);
 popupAddItem.addEventListener('click', closePopup);
+popupPictureView.addEventListener('click', closePopup);
 
 // обработчик submit в формах
 editProfileForm.addEventListener('submit', saveProfile);
