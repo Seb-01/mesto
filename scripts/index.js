@@ -101,6 +101,9 @@ function loadCard(new_name, link) {
   //добавляем обработчик события trash
   const trashButton = cardElement.querySelector('.elements__trash-button');
   trashButton.addEventListener('click', deleteCard);
+  //добавляем обработчик события - клик на карточке
+  const photo = cardElement.querySelector('.elements__photo');
+  photo.addEventListener('click',showPicture);
 }
 
 // лайкнуть!
@@ -119,8 +122,6 @@ function deleteCard(evt)
 // показать карточку
 function showPicture(evt)
 {
-  // здесь нужно определить: вертикальный или горизонтальный popup
-
   // поднимаем попап
   popupPictureView.classList.add('popup_opened');
 
