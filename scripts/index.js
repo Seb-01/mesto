@@ -49,16 +49,16 @@ const profileEditButton = document.querySelector('.profile__edit-button');
 const profileAddButton = document.querySelector('.profile__add-button');
 
 // поля input формы редактирования профиля в DOM
-let nameInput = document.querySelector('.popup__input_field_name');
-let jobInput = document.querySelector('.popup__input_field_job');
+const nameInput = document.querySelector('.popup__input_field_name');
+const jobInput = document.querySelector('.popup__input_field_job');
 
 // поля в профиле формы редактирования профиля в DOM
-let title = document.querySelector('.profile__title');
-let subtitle = document.querySelector('.profile__subtitle');
+const title = document.querySelector('.profile__title');
+const subtitle = document.querySelector('.profile__subtitle');
 
 // поля input формы для добавления карточки в DOM
-let mestoNameInput = document.querySelector('.popup__input_field_mesto-name');
-let mestoLinkInput = document.querySelector('.popup__input_field_link');
+const mestoNameInput = document.querySelector('.popup__input_field_mesto-name');
+const mestoLinkInput = document.querySelector('.popup__input_field_link');
 
 
 // Здесь объявления функций:
@@ -69,39 +69,15 @@ function loadInitialCards(initialCards) {
   const cardTemplate = document.querySelector('#card-template').content;
   let likeButtonElem, trashButton, photoElem;
 
-
+  // добавляем карточки
   for (let i=0; i < initialCards.length; i++) {
-  // ищем в шаблоне нужный элемент и клонируем его
-  const cardElement = cardTemplate.querySelector('.elements__card').cloneNode(true);
-
-  // ИЗМЕНЯЕМ атрибуты элемента значениями из массива:
-  photoElem = cardElement.querySelector('.elements__photo');
-  photoElem.setAttribute('src', initialCards[i].link);
-  photoElem.setAttribute('alt', initialCards[i].name);
-
-  titleElem = cardElement.querySelector('.elements__title');
-  titleElem.textContent = initialCards[i].name;
-
-
-  // добавялем карточку в конец секции elements
-  elemContainer.append(cardElement);
-
-  //добавляем обработчик события лайку
-  likeButtonElem = cardElement.querySelector('.elements__like-button');
-  likeButtonElem.addEventListener('click', likeCard);
-  //добавляем обработчик события trash
-  trashButton = cardElement.querySelector('.elements__trash-button');
-  trashButton.addEventListener('click', deleteCard);
-  //добавляем обработчик события показать картинку
-  photoElem= cardElement.querySelector('.elements__photo');
-  photoElem.addEventListener('click', showPicture);
-
+    loadCard(initialCards[i].name, initialCards[i].link);
   }
 }
 
 //Функция для добавления карточки:
 //Сократить код! -------------------------------------------------
-function loadCard(name, link) {
+function loadCard(new_name, link) {
   // получаем содержание шаблона
   const cardTemplate = document.querySelector('#card-template').content;
 
@@ -111,10 +87,10 @@ function loadCard(name, link) {
   // ИЗМЕНЯЕМ атрибуты элемента значениями аргументами:
   photoElem = cardElement.querySelector('.elements__photo');
   photoElem.setAttribute('src', link);
-  photoElem.setAttribute('alt', name);
+  photoElem.setAttribute('alt', new_name);
 
   titleElem = cardElement.querySelector('.elements__title');
-  titleElem.textContent = name;
+  titleElem.textContent = new_name;
 
   // добавялем карточку в начало секции elements
   elemContainer.prepend(cardElement);
