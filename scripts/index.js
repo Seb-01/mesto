@@ -9,6 +9,8 @@ const popupEditProfile = document.querySelector('.popup_target_profile');
 const popupAddItem = document.querySelector('.popup_target_add-item');
 /** popup картинки */
 const popupPictureView = document.querySelector('.popup_target_picture-view');
+const pictureTo = popupPictureView.querySelector('.popup__picture');
+const titleTo = popupPictureView.querySelector('.popup__figure-caption');
 
 /** форма редактирования профиля */
 const editProfileForm = document.querySelector('.popup__edit-profile-form');
@@ -41,6 +43,24 @@ const closeButtons = document.querySelectorAll('.popup__close-button');
 
 /** Раздел объявления функций: */
 
+/** Функция поднять popup
+ * @param {object} popupElem - элемент popup
+ */
+ function showPopup(popupElem) {
+  popupElem.classList.add('popup_opened');
+}
+
+/** Функция закрыть popup
+ * @param {object} evt - событие или элемент
+ */
+ function closePopup(evt) {
+   if(evt.target) // если событие
+    evt.target.closest('.popup').classList.remove('popup_opened');
+  else //значит элемент
+    evt.classList.remove('popup_opened')
+}
+
+
 /** Функция - лайкнуть картинку
  * @param {object} evt - событие
  */
@@ -58,20 +78,13 @@ function deleteCard(evt) {
 /** Функция - показать картинку
  * @param {object} evt - событие
  */
-function showPicture(evt)
+function showPicture(src, alt, title)
 {
-  /** поднимаем попап */
-  popupPictureView.classList.add('popup_opened');
+  showPopup(popupPictureView);
 
-  /** получаем src и alt атрибуты картинки */
-  const pictureTo = popupPictureView.querySelector('.popup__picture');
-  pictureTo.setAttribute('src', evt.target.getAttribute('src'));
-  pictureTo.setAttribute('alt', evt.target.getAttribute('alt'));
-
-  /** получаем подпись к карточке */
-  const titleFrom = evt.target.closest('.elements__card').querySelector('.elements__title');
-  const titleTo = popupPictureView.querySelector('.popup__figure-caption');
-  titleTo.textContent = titleFrom.textContent;
+  pictureTo.setAttribute('src', src);
+  pictureTo.setAttribute('alt', alt);
+  titleTo.textContent = title;
 }
 
 /** Функция для создания карточки из шаблона:
@@ -84,11 +97,11 @@ function createCard(new_name, link) {
   const cardElement = cardTemplate.querySelector('.elements__card').cloneNode(true);
 
   /** изменяем атрибуты карточки значениями-аргументами */
-  let photoElem = cardElement.querySelector('.elements__photo');
+  const photoElem = cardElement.querySelector('.elements__photo');
   photoElem.setAttribute('src', link);
   photoElem.setAttribute('alt', new_name);
 
-  let titleElem = cardElement.querySelector('.elements__title');
+  const titleElem = cardElement.querySelector('.elements__title');
   titleElem.textContent = new_name;
 
   /** добавляем обработчик события кнопке-лайку */
@@ -98,8 +111,7 @@ function createCard(new_name, link) {
   const trashButton = cardElement.querySelector('.elements__trash-button');
   trashButton.addEventListener('click', deleteCard);
   /** добавляем обработчик события - клик на карточке */
-  const photo = cardElement.querySelector('.elements__photo');
-  photo.addEventListener('click', showPicture);
+  photoElem.addEventListener('click', showPicture.bind(this, link, new_name, new_name), false);
 
   return cardElement;
 }
@@ -114,14 +126,12 @@ function createCard(new_name, link) {
   elemContainer.prepend(createCard(new_name,link));
 }
 
-/** Функция для рендеринга карточек при загрузке страницы:
- * @param {Array} initialCards - массив с исходными карточками
- */
- function loadInitialCards(initialCards) {
+/** Функция для рендеринга карточек при загрузке страницы */
+ function loadInitialCards() {
   /** добавляем карточки в DOM*/
-  for (let i=0; i < initialCards.length; i++) {
-    renderCard(initialCards[i].name, initialCards[i].link, elemContainer);
-  }
+   initialCards.forEach((card) => {
+    renderCard(card.name, card.link, elemContainer);
+  })
 }
 
 /** Функция рендеринга новой карточки
@@ -134,20 +144,6 @@ function saveNewItem(evt) {
   closePopup(popupAddItem);
 }
 
-/** Функция поднять popup
- * @param {object} popupElem - элемент popup
- */
-function showPopup(popupElem) {
-  popupElem.classList.add('popup_opened');
-}
-
-/** Функция закрыть popup
- * @param {object} popupElem - элемент popup
- */
- function closePopup(popupElem) {
-  popupElem.classList.remove('popup_opened');
-}
-
 /** Функция открытия формы редактирования профиля */
 function showEditProfileForm() {
   /** При открытии формы поля «Имя» и «О себе» должны быть заполнены теми значениями,
@@ -158,12 +154,6 @@ function showEditProfileForm() {
 
   /** поднимаем попап */
   showPopup(popupEditProfile);
-}
-
-/** Функция открыть форму добавления новой карточки */
-function showAddItemForm() {
-  /** поднимаем попап */
-  showPopup(popupAddItem);
 }
 
 /** Функция обновления инфо в профиле
@@ -188,12 +178,10 @@ loadInitialCards(initialCards);
 /** назначаем событие - редактируем профиль */
 profileEditButton.addEventListener('click', showEditProfileForm);
 /** назначаем событие - добавляем карточку */
-profileAddButton.addEventListener('click', showAddItemForm);
+profileAddButton.addEventListener('click', function (){showPopup(popupAddItem);});
 
 /** назначаем событие - закрыть popup */
-closeButtons[0].addEventListener('click', function() {closePopup(popupEditProfile);});
-closeButtons[1].addEventListener('click', function() {closePopup(popupAddItem);});
-closeButtons[2].addEventListener('click', function() {closePopup(popupPictureView);});
+closeButtons.forEach((button) => { button.addEventListener('click', closePopup);} )
 
 /** обработчик submit в формах */
 editProfileForm.addEventListener('submit', saveProfile);
