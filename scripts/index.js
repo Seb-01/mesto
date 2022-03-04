@@ -56,10 +56,9 @@ const closeButtons = document.querySelectorAll('.popup__close-button');
  function closePopup(evt) {
    if(evt.target) // если событие
     evt.target.closest('.popup').classList.remove('popup_opened');
-  else //значит элемент
+  else // eсли popup
     evt.classList.remove('popup_opened')
 }
-
 
 /** Функция - лайкнуть картинку
  * @param {object} evt - событие
@@ -76,7 +75,9 @@ function deleteCard(evt) {
 }
 
 /** Функция - показать картинку
- * @param {object} evt - событие
+ * @param {string} src - ссылка на картинку
+ * @param {string} alt - подпись для атрибута alt
+ * @param {string} title - подпись для figure
  */
 function showPicture(src, alt, title)
 {
