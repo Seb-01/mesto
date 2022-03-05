@@ -8,9 +8,9 @@ const popupEditProfile = document.querySelector('.popup_target_profile');
 /** popup формы добавления карточки */
 const popupAddItem = document.querySelector('.popup_target_add-item');
 /** popup картинки */
-const popupPictureView = document.querySelector('.popup_target_picture-view');
-const pictureTo = popupPictureView.querySelector('.popup__picture');
-const titleTo = popupPictureView.querySelector('.popup__figure-caption');
+const imagePopup = document.querySelector('.popup_target_picture-view');
+const pictureElem = imagePopup.querySelector('.popup__picture');
+const captionElem = imagePopup.querySelector('.popup__figure-caption');
 
 /** форма редактирования профиля */
 const editProfileForm = document.querySelector('.popup__edit-profile-form');
@@ -51,15 +51,11 @@ const closeButtons = document.querySelectorAll('.popup__close-button');
 }
 
 /** Функция закрыть popup
- * @param {object} evt - событие или элемент
+ * @param {object} popupElem - элемент
  */
- function closePopup(evt) {
-   if(evt.target) // если событие
-    evt.target.closest('.popup').classList.remove('popup_opened');
-  else //значит элемент
-    evt.classList.remove('popup_opened')
+ function closePopup(popupElem) {
+  popupElem.classList.remove('popup_opened')
 }
-
 
 /** Функция - лайкнуть картинку
  * @param {object} evt - событие
@@ -76,33 +72,35 @@ function deleteCard(evt) {
 }
 
 /** Функция - показать картинку
- * @param {object} evt - событие
+ * @param {string} src - адрес картинки
+ * @param {string} newName - подпись к картинке
  */
-function showPicture(src, alt, title)
+function showPicture(src, newName)
 {
-  showPopup(popupPictureView);
+  //поднмаем popup
+  showPopup(imagePopup);
 
-  pictureTo.setAttribute('src', src);
-  pictureTo.setAttribute('alt', alt);
-  titleTo.textContent = title;
+  pictureElem.src=src;
+  pictureElem.alt=newName;
+  captionElem.textContent = newName;
 }
 
 /** Функция для создания карточки из шаблона:
- * @param {string} new_name - подпись к картинке
+ * @param {string} newName - подпись к картинке
  * @param {string} link - ссылка на картинку
  * @returns {object} - элемент новой карточки
  */
-function createCard(new_name, link) {
+function createCard(newName, link) {
   /** клонируем из шаблона новую карточку */
   const cardElement = cardTemplate.querySelector('.elements__card').cloneNode(true);
 
   /** изменяем атрибуты карточки значениями-аргументами */
   const photoElem = cardElement.querySelector('.elements__photo');
   photoElem.setAttribute('src', link);
-  photoElem.setAttribute('alt', new_name);
+  photoElem.setAttribute('alt', newName);
 
   const titleElem = cardElement.querySelector('.elements__title');
-  titleElem.textContent = new_name;
+  titleElem.textContent = newName;
 
   /** добавляем обработчик события кнопке-лайку */
   const likeButtonElem = cardElement.querySelector('.elements__like-button');
@@ -111,19 +109,19 @@ function createCard(new_name, link) {
   const trashButton = cardElement.querySelector('.elements__trash-button');
   trashButton.addEventListener('click', deleteCard);
   /** добавляем обработчик события - клик на карточке */
-  photoElem.addEventListener('click', showPicture.bind(this, link, new_name, new_name), false);
+  photoElem.addEventListener('click', () => showPicture(link, newName));
 
   return cardElement;
 }
 
 /** Функция для рендеринга карточки:
- * @param {string} new_name - подпись к картинке
+ * @param {string} newName - подпись к картинке
  * @param {string} link - ссылка на картинку
  * @param {object} elemContainer - контейнер
  */
- function renderCard(new_name, link, elemContainer) {
+ function renderCard(newName, link, elemContainer) {
   /** добавялем карточку в DOM */
-  elemContainer.prepend(createCard(new_name,link));
+  elemContainer.prepend(createCard(newName,link));
 }
 
 /** Функция для рендеринга карточек при загрузке страницы */
@@ -181,7 +179,9 @@ profileEditButton.addEventListener('click', showEditProfileForm);
 profileAddButton.addEventListener('click', function (){showPopup(popupAddItem);});
 
 /** назначаем событие - закрыть popup */
-closeButtons.forEach((button) => { button.addEventListener('click', closePopup);} )
+closeButtons[0].addEventListener('click', () => closePopup(popupEditProfile));
+closeButtons[1].addEventListener('click', () => closePopup(popupAddItem));
+closeButtons[2].addEventListener('click', () => closePopup(imagePopup));
 
 /** обработчик submit в формах */
 editProfileForm.addEventListener('submit', saveProfile);
