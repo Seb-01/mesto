@@ -38,8 +38,10 @@ const mestoLinkInput = document.querySelector('.popup__input_field_link');
 const cardTemplate = document.querySelector('#card-template').content;
 
 /** кнопкки закрытия popup */
-const closeButtons = document.querySelectorAll('.popup__close-button');
-
+//const closeButtons = document.querySelectorAll('.popup__close-button');
+const closePopupEditProfileButton = popupEditProfile.querySelector('.popup__close-button');
+const closePopupAddItemButton = popupAddItem.querySelector('.popup__close-button');
+const closeImagePopupButton = imagePopup.querySelector('.popup__close-button');
 
 /** Раздел объявления функций: */
 
@@ -72,17 +74,16 @@ function deleteCard(evt) {
 }
 
 /** Функция - показать картинку
- * @param {string} src - адрес картинки
- * @param {string} newName - подпись к картинке
+ * @param {object} cardData - данные картинки
  */
-function showPicture(src, newName)
+function showPicture(cardData)
 {
   //поднмаем popup
   showPopup(imagePopup);
 
-  pictureElem.src=src;
-  pictureElem.alt=newName;
-  captionElem.textContent = newName;
+  pictureElem.src = cardData.src;
+  pictureElem.alt = cardData.name;
+  captionElem.textContent = cardData.name;
 }
 
 /** Функция для создания карточки из шаблона:
@@ -93,11 +94,12 @@ function showPicture(src, newName)
 function createCard(newName, link) {
   /** клонируем из шаблона новую карточку */
   const cardElement = cardTemplate.querySelector('.elements__card').cloneNode(true);
+  const cardData = new Object();
 
   /** изменяем атрибуты карточки значениями-аргументами */
   const photoElem = cardElement.querySelector('.elements__photo');
-  photoElem.setAttribute('src', link);
-  photoElem.setAttribute('alt', newName);
+  photoElem.src=link;
+  photoElem.alt=newName;
 
   const titleElem = cardElement.querySelector('.elements__title');
   titleElem.textContent = newName;
@@ -109,7 +111,9 @@ function createCard(newName, link) {
   const trashButton = cardElement.querySelector('.elements__trash-button');
   trashButton.addEventListener('click', deleteCard);
   /** добавляем обработчик события - клик на карточке */
-  photoElem.addEventListener('click', () => showPicture(link, newName));
+  cardData.src=link;
+  cardData.name=newName;
+  photoElem.addEventListener('click', () => showPicture(cardData));
 
   return cardElement;
 }
@@ -179,9 +183,10 @@ profileEditButton.addEventListener('click', showEditProfileForm);
 profileAddButton.addEventListener('click', function (){showPopup(popupAddItem);});
 
 /** назначаем событие - закрыть popup */
-closeButtons[0].addEventListener('click', () => closePopup(popupEditProfile));
-closeButtons[1].addEventListener('click', () => closePopup(popupAddItem));
-closeButtons[2].addEventListener('click', () => closePopup(imagePopup));
+//closeButtons[0].addEventListener('click', () => closePopup(popupEditProfile));
+closePopupEditProfileButton.addEventListener('click', () => closePopup(popupEditProfile));
+closePopupAddItemButton.addEventListener('click', () => closePopup(popupAddItem));
+closeImagePopupButton.addEventListener('click', () => closePopup(imagePopup));
 
 /** обработчик submit в формах */
 editProfileForm.addEventListener('submit', saveProfile);
