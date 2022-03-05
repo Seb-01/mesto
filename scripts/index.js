@@ -53,16 +53,8 @@ const closeButtons = document.querySelectorAll('.popup__close-button');
 /** Функция закрыть popup
  * @param {object} popupElem - элемент
  */
-<<<<<<< HEAD
- function closePopup(evt) {
-   if(evt.target) // если событие
-    evt.target.closest('.popup').classList.remove('popup_opened');
-  else // eсли popup
-    evt.classList.remove('popup_opened')
-=======
  function closePopup(popupElem) {
   popupElem.classList.remove('popup_opened')
->>>>>>> develop
 }
 
 /** Функция - лайкнуть картинку
