@@ -38,7 +38,6 @@ const mestoLinkInput = document.querySelector('.popup__input_field_link');
 const cardTemplate = document.querySelector('#card-template').content;
 
 /** кнопкки закрытия popup */
-//const closeButtons = document.querySelectorAll('.popup__close-button');
 const closePopupEditProfileButton = popupEditProfile.querySelector('.popup__close-button');
 const closePopupAddItemButton = popupAddItem.querySelector('.popup__close-button');
 const closeImagePopupButton = imagePopup.querySelector('.popup__close-button');
