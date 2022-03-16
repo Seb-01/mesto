@@ -93,7 +93,6 @@ function showPicture(cardData)
 function createCard(newName, link) {
   /** клонируем из шаблона новую карточку */
   const cardElement = cardTemplate.querySelector('.elements__card').cloneNode(true);
-  const cardData = new Object();
 
   /** изменяем атрибуты карточки значениями-аргументами */
   const photoElem = cardElement.querySelector('.elements__photo');
@@ -110,9 +109,7 @@ function createCard(newName, link) {
   const trashButton = cardElement.querySelector('.elements__trash-button');
   trashButton.addEventListener('click', deleteCard);
   /** добавляем обработчик события - клик на карточке */
-  cardData.src=link;
-  cardData.name=newName;
-  photoElem.addEventListener('click', () => showPicture(cardData));
+  photoElem.addEventListener('click', () => showPicture({src:link, name:newName}));
 
   return cardElement;
 }
