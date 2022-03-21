@@ -44,6 +44,7 @@ const closeImagePopupButton = imagePopup.querySelector('.popup__close-button');
 
 /** Раздел объявления функций: */
 
+
 /** Функция для показа ошибки в ходе валидации поля
  *
  * @param {*} formElement  - форма
@@ -92,6 +93,31 @@ const hideInputError = (formElement, inputElement) => {
 
   // Закрываем popup
   popupElem.classList.remove('popup_opened');
+  // убираем обработчик Esc
+  document.removeEventListener('keydown', escCloseHundler);
+}
+
+/** Функция - обрабочик нажатия Esc-клавиши
+ * @param {object} evt - событие
+ */
+ function closePopupByKeydownEsc(evt) {
+  // если нажали Esc - закрываем popup
+  if(evt.key === 'Escape') {
+    // какой попап открыт?
+    closePopup(document.querySelector('.popup_opened'));
+  }
+}
+
+/** Функция, которая закрывает окошко по клику на затемненную область.
+ * @param {object} event - событие
+ */
+ const closePopupByClickOnOverlay = function(event) {
+  console.log(event.target, event.currentTarget)
+  if (event.target !== event.currentTarget) {
+    return
+  }
+  // какой попап открыт?
+  closePopup(document.querySelector('.popup_opened'));
 }
 
 /** Функция - лайкнуть картинку
@@ -119,6 +145,10 @@ function showPicture(cardData)
   pictureElem.src = cardData.src;
   pictureElem.alt = cardData.name;
   captionElem.textContent = cardData.name;
+
+    // добавялем обработчики закрытия по Esc и клику мыши на overlay
+    document.addEventListener('keydown', closePopupByKeydownEsc);
+    imagePopup.addEventListener('mousedown', closePopupByClickOnOverlay);
 }
 
 /** Функция для создания карточки из шаблона:
@@ -178,6 +208,7 @@ function saveNewItem(evt) {
   closePopup(popupAddItem);
 }
 
+
 /** Функция открытия формы редактирования профиля */
 function showEditProfileForm() {
   /** При открытии формы поля «Имя» и «О себе» должны быть заполнены теми значениями,
@@ -190,6 +221,10 @@ function showEditProfileForm() {
   showPopup(popupEditProfile);
   // актуализируем состояние кнопки submit
   toggleButtonState([nameInput, jobInput], popupEditProfile.querySelector('.popup__save-button'));
+
+  // добавялем обработчики закрытия по Esc и клику мыши на overlay
+  document.addEventListener('keydown', closePopupByKeydownEsc);
+  popupEditProfile.addEventListener('mousedown', closePopupByClickOnOverlay);
 }
 
 /** Функция открытия формы редактирования профиля */
@@ -203,6 +238,10 @@ function showAddItemForm() {
   showPopup(popupAddItem);
   // актуализируем состояние кнопки submit
   toggleButtonState([mestoNameInput, mestoLinkInput], popupAddItem.querySelector('.popup__save-button'));
+
+  // добавялем обработчики закрытия по Esc и клику мыши на overlay
+  document.addEventListener('keydown', closePopupByKeydownEsc);
+  popupAddItem.addEventListener('mousedown', closePopupByClickOnOverlay);
 }
 
 /** Функция обновления инфо в профиле
@@ -317,6 +356,7 @@ closeImagePopupButton.addEventListener('click', () => closePopup(imagePopup));
 /** обработчик submit в формах */
 editProfileForm.addEventListener('submit', saveProfile);
 addItemForm.addEventListener('submit', saveNewItem);
+
 
 /** Запускаем валидацию форм */
 enableValidation(editProfileForm);
