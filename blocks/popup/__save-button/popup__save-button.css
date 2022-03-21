@@ -5,7 +5,7 @@
   cursor: pointer;
   border: 0;
   padding: 0;
-  margin: 48px auto 37px;
+  margin: 48px 0 37px;
   background: #000000;
   border-radius: 2px;
   font-family: "Inter", Arial, sans-serif;
@@ -28,6 +28,6 @@
     height: 46px;
     font-size: 14px;
     line-height: 17px;
-    margin: 45px auto 25px;
+    margin: 45px 0 25px;
   }
 }

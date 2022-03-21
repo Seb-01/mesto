@@ -59,24 +59,36 @@
         <form name="profile-edit" class="popup__edit-profile-form">
           <h2 class="popup__title">Редактировать профиль</h2>
           <fieldset class="popup__info">
-            <input
-              type="text"
-              class="popup__input popup__input_field_name"
-              value=""
-              name="name"
-              placeholder="Введите имя"
-              required
-            />
-            <input
-              type="text"
-              class="popup__input popup__input_field_job"
-              value=""
-              name="job"
-              placeholder="Введите род занятий"
-              required
-            />
+            <label class="popup__field">
+              <input
+                id="name-input"
+                type="text"
+                class="popup__input popup__input_field_name"
+                value=""
+                name="name"
+                placeholder="Введите имя"
+                minlength="2"
+                maxlength="40"
+                required
+              />
+              <span class="popup__input-error name-input-error"></span>
+            </label>
+            <label class="popup__field">
+              <input
+                id="job-input"
+                type="text"
+                class="popup__input popup__input_field_job"
+                value=""
+                name="job"
+                placeholder="Введите род занятий"
+                minlength="2"
+                maxlength="200"
+                required
+              />
+              <span class="popup__input-error job-input-error"></span>
+            </label>
+            <button class="popup__save-button" type="submit">Сохранить</button>
           </fieldset>
-          <button class="popup__save-button" type="submit">Сохранить</button>
         </form>
         <button
           class="popup__close-button"
@@ -92,24 +104,34 @@
         <form name="new-item-form" class="popup__add-item-form">
           <h2 class="popup__title">Новое место</h2>
           <fieldset class="popup__info">
-            <input
-              type="text"
-              class="popup__input popup__input_field_mesto-name"
-              value=""
-              name="mesto-name"
-              placeholder="Название"
-              required
-            />
-            <input
-              type="text"
-              class="popup__input popup__input_field_link"
-              value=""
-              name="link"
-              placeholder="Сcылка на картинку"
-              required
-            />
+            <label class="popup__field">
+              <input
+                id="mesto-name-input"
+                type="text"
+                class="popup__input popup__input_field_mesto-name"
+                value=""
+                name="mesto-name"
+                placeholder="Название"
+                minlength="2"
+                maxlength="30"
+                required
+              />
+              <span class="popup__input-error mesto-name-input-error"></span>
+            </label>
+            <label class="popup__field">
+              <input
+                id="link-input"
+                class="popup__input popup__input_field_link"
+                value=""
+                name="link"
+                placeholder="Сcылка на картинку"
+                type="url"
+                required
+              />
+              <span class="popup__input-error link-input-error"></span>
+            </label>
+            <button class="popup__save-button" type="submit">Создать</button>
           </fieldset>
-          <button class="popup__save-button" type="submit">Создать</button>
         </form>
         <button
           class="popup__close-button"
