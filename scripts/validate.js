@@ -59,7 +59,7 @@ const hideInputError = (formElement, inputElement, inputErrorClass, errorClass) 
  */
  function hasInvalidInput (inputList) {
   // проходим по этому массиву методом some
-  return inputList.some((inputElement) => {
+  return Array.from(inputList).some((inputElement) => {
     // Если поле не валидно, колбэк вернёт true
     // Обход массива прекратится и вся фунцкция hasInvalidInput вернёт true
     return !inputElement.validity.valid;
@@ -77,9 +77,13 @@ const hideInputError = (formElement, inputElement, inputErrorClass, errorClass) 
   if (hasInvalidInput(inputList)) {
     // сделай кнопку неактивной
     buttonElement.classList.add(inactiveButtonClass);
+    //buttonElement.disabled=true;
+    buttonElement.setAttribute('disabled', true);
   } else {
     // иначе сделай кнопку активной
     buttonElement.classList.remove(inactiveButtonClass);
+    //buttonElement.disabled=false;
+    buttonElement.removeAttribute('disabled');
   }
 }
 
@@ -117,18 +121,29 @@ const hideInputError = (formElement, inputElement, inputErrorClass, errorClass) 
  */
  function  enableValidation(validationSettings) {
   // 1. получаем все формы в документе
-  const formList = Array.from(document.querySelectorAll(validationSettings.formSelector));
+  const formList = document.querySelectorAll(validationSettings.formSelector);
 
   // 2. проходим по всем input-полям в каждой форме
   formList.forEach((formElement) => {
 
-    let inputList = Array.from(formElement.querySelectorAll(validationSettings.inputSelector));
-    let buttonElement = formElement.querySelector(validationSettings.submitButtonSelector);
+    const inputList = Array.from(formElement.querySelectorAll(validationSettings.inputSelector));
+    const buttonElement = formElement.querySelector(validationSettings.submitButtonSelector);
 
     setEventListeners (formElement, inputList, buttonElement,
       validationSettings.inactiveButtonClass, validationSettings.inputErrorClass, validationSettings.errorClass);
 
   });
+}
+
+/** Функция для очистки полей формы от элементов ошибок
+ * @param {object} form - форма
+ */
+function clearFormInputError(form) {
+const inputList =  form.querySelectorAll(enableValidationSettings.inputSelector);
+
+inputList.forEach((inputElement) =>
+  hideInputError(form, inputElement, enableValidationSettings.inputErrorClass,
+    enableValidationSettings.errorClass));
 }
 
 /** Запускаем валидацию форм */

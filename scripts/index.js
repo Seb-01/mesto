@@ -13,14 +13,14 @@ const pictureElem = imagePopup.querySelector('.popup__picture');
 const captionElem = imagePopup.querySelector('.popup__figure-caption');
 
 /** форма редактирования профиля */
-const editProfileForm = document.querySelector('.popup__edit-profile-form');
+const profileEditForm = document.querySelector('.popup__edit-profile-form');
 /** форма добавления карточки */
-const addItemForm = document.querySelector('.popup__add-item-form');
+const itemAddForm = document.querySelector('.popup__add-item-form');
 
 /** кнопка "редактировать профиль" */
 const profileEditButton = document.querySelector('.profile__edit-button');
 /** кнопка "добавить карточку" */
-const addItemButton = document.querySelector('.profile__add-button');
+const itemAddButton = document.querySelector('.profile__add-button');
 
 /** поля input формы редактирования профиля */
 const nameInput = document.querySelector('.popup__input_field_name');
@@ -38,9 +38,9 @@ const mestoLinkInput = document.querySelector('.popup__input_field_link');
 const cardTemplate = document.querySelector('#card-template').content;
 
 /** кнопкки закрытия popup */
-const closePopupEditProfileButton = popupEditProfile.querySelector('.popup__close-button');
-const closePopupAddItemButton = popupAddItem.querySelector('.popup__close-button');
-const closeImagePopupButton = imagePopup.querySelector('.popup__close-button');
+const popupEditProfileCloseButton = popupEditProfile.querySelector('.popup__close-button');
+const popupAddItemCloseButton = popupAddItem.querySelector('.popup__close-button');
+const imagePopupCloseButton = imagePopup.querySelector('.popup__close-button');
 
 /** Раздел объявления функций: */
 
@@ -49,28 +49,18 @@ const closeImagePopupButton = imagePopup.querySelector('.popup__close-button');
  */
  function showPopup(popupElem) {
   popupElem.classList.add('popup_opened');
+  // добавялем обработчики закрытия по Esc и клику мыши на overlay
+  document.addEventListener('keydown', closePopupByKeydownEsc);
 }
 
 /** Функция закрыть popup
  * @param {object} popupElem - элемент
  */
  function closePopup(popupElem) {
-  //убрать сообщения об ошибках, если были:
-
-  //проходим по всем формам и input-полям в них
-  //перебирать HTMLCollection с помощью forEach не получится!
-  Array.from(popupElem.getElementsByTagName('form')).forEach(formElem => {
-     formElem.querySelectorAll('.popup__input').forEach(inputElem => {
-      hideInputError(formElem, inputElem, enableValidationSettings.inputErrorClass,
-        enableValidationSettings.errorClass);
-     })
-  });
-
-  // Закрываем popup
+   // Закрываем popup
   popupElem.classList.remove('popup_opened');
   // убираем обработчик Esc
   document.removeEventListener('keydown', closePopupByKeydownEsc);
-  popupElem.addEventListener('mousedown', closePopupByClickOnOverlay);
 }
 
 /** Функция - обработчик нажатия Esc-клавиши
@@ -88,11 +78,15 @@ const closeImagePopupButton = imagePopup.querySelector('.popup__close-button');
  * @param {object} event - событие
  */
  const closePopupByClickOnOverlay = function(event) {
-  if (event.target !== event.currentTarget && event.target !== 'button.popup__close-button') {
-    return
-  }
   // какой попап открыт?
-  closePopup(document.querySelector('.popup_opened'));
+  const popupOpen = document.querySelector('.popup_opened');
+
+  const buttonClose = popupOpen.querySelector('.popup__close-button');
+
+  if (event.target !== event.currentTarget && event.target !== buttonClose) {
+    return;
+  }
+  closePopup(popupOpen);
 }
 
 /** Функция - лайкнуть картинку
@@ -114,16 +108,13 @@ function deleteCard(evt) {
  */
 function showPicture(cardData)
 {
-  //поднмаем popup
-  showPopup(imagePopup);
-
+  // заполняем данные в полях
   pictureElem.src = cardData.src;
   pictureElem.alt = cardData.name;
   captionElem.textContent = cardData.name;
 
-    // добавялем обработчики закрытия по Esc и клику мыши на overlay
-    document.addEventListener('keydown', closePopupByKeydownEsc);
-    imagePopup.addEventListener('mousedown', closePopupByClickOnOverlay);
+  //поднмаем popup
+  showPopup(imagePopup);
 }
 
 /** Функция для создания карточки из шаблона:
@@ -193,31 +184,33 @@ function showEditProfileForm() {
 
   /** поднимаем попап */
   showPopup(popupEditProfile);
-  // актуализируем состояние кнопки submit
-  toggleButtonState([nameInput, jobInput], popupEditProfile.querySelector('.popup__save-button'),
-    enableValidationSettings.inactiveButtonClass);
 
-  // добавялем обработчики закрытия по Esc и клику мыши на overlay
-  document.addEventListener('keydown', closePopupByKeydownEsc);
-  popupEditProfile.addEventListener('mousedown', closePopupByClickOnOverlay);
+  // убираем ошибки полей ввода формы
+  clearFormInputError(profileEditForm);
+
+  const inputList =  profileEditForm.querySelectorAll(enableValidationSettings.inputSelector);
+
+  // актуализируем состояние кнопки submit
+  toggleButtonState(inputList, popupEditProfile.querySelector('.popup__save-button'),
+    enableValidationSettings.inactiveButtonClass);
 }
 
 /** Функция открытия формы редактирования профиля */
 function showAddItemForm() {
 
   // очистим поля от предыдущей "работы"
-  mestoNameInput.value = "";
-  mestoLinkInput.value = "";
+  itemAddForm.reset();
 
   /** поднимаем попап */
   showPopup(popupAddItem);
-  // актуализируем состояние кнопки submit
-  toggleButtonState([mestoNameInput, mestoLinkInput], popupAddItem.querySelector('.popup__save-button'),
-    enableValidationSettings.inactiveButtonClass);
 
-  // добавялем обработчики закрытия по Esc и клику мыши на overlay
-  document.addEventListener('keydown', closePopupByKeydownEsc);
-  popupAddItem.addEventListener('mousedown', closePopupByClickOnOverlay);
+  // убираем ошибки полей ввода формы
+  clearFormInputError(itemAddForm);
+
+  const inputList =  itemAddForm.querySelectorAll(enableValidationSettings.inputSelector);
+  // актуализируем состояние кнопки submit
+  toggleButtonState(inputList, popupAddItem.querySelector('.popup__save-button'),
+    enableValidationSettings.inactiveButtonClass);
 }
 
 /** Функция обновления инфо в профиле
@@ -241,14 +234,13 @@ loadInitialCards(initialCards);
 /** назначаем событие - редактируем профиль */
 profileEditButton.addEventListener('click', showEditProfileForm);
 /** назначаем событие - добавляем карточку */
-addItemButton.addEventListener('click', showAddItemForm);
-
-/** назначаем событие - закрыть popup */
-//closeButtons[0].addEventListener('click', () => closePopup(popupEditProfile));
-closePopupEditProfileButton.addEventListener('click', () => closePopup(popupEditProfile));
-closePopupAddItemButton.addEventListener('click', () => closePopup(popupAddItem));
-closeImagePopupButton.addEventListener('click', () => closePopup(imagePopup));
+itemAddButton.addEventListener('click', showAddItemForm);
 
 /** обработчик submit в формах */
-editProfileForm.addEventListener('submit', saveProfile);
-addItemForm.addEventListener('submit', saveNewItem);
+profileEditForm.addEventListener('submit', saveProfile);
+itemAddForm.addEventListener('submit', saveNewItem);
+
+/** добавялем обработчик закрытия popup по клику мыши на overlay */
+imagePopup.addEventListener('mousedown', closePopupByClickOnOverlay);
+popupAddItem.addEventListener('mousedown', closePopupByClickOnOverlay);
+popupEditProfile.addEventListener('mousedown', closePopupByClickOnOverlay);
