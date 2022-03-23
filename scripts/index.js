@@ -73,7 +73,7 @@ const closeImagePopupButton = imagePopup.querySelector('.popup__close-button');
   popupElem.addEventListener('mousedown', closePopupByClickOnOverlay);
 }
 
-/** Функция - обрабочик нажатия Esc-клавиши
+/** Функция - обработчик нажатия Esc-клавиши
  * @param {object} evt - событие
  */
  function closePopupByKeydownEsc(evt) {
