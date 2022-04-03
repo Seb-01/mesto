@@ -1,3 +1,8 @@
+/** Раздел импорта */
+import {Card} from './card.js';
+import {initialCards} from './cards.js';
+
+
 /** Раздел объявления констант */
 
 /** Kонтейнер с карточками */
@@ -5,8 +10,10 @@ const elemContainer = document.querySelector('.elements');
 
 /** popup формы редактирования профиля */
 const popupEditProfile = document.querySelector('.popup_target_profile');
+
 /** popup формы добавления карточки */
 const popupAddItem = document.querySelector('.popup_target_add-item');
+
 /** popup картинки */
 const imagePopup = document.querySelector('.popup_target_picture-view');
 const pictureElem = imagePopup.querySelector('.popup__picture');
@@ -47,7 +54,7 @@ const imagePopupCloseButton = imagePopup.querySelector('.popup__close-button');
 /** Функция поднять popup
  * @param {object} popupElem - элемент popup
  */
- function showPopup(popupElem) {
+ export function showPopup(popupElem) {
   popupElem.classList.add('popup_opened');
   // добавялем обработчики закрытия по Esc и клику мыши на overlay
   document.addEventListener('keydown', closePopupByKeydownEsc);
@@ -117,50 +124,55 @@ function showPicture(cardData)
   showPopup(imagePopup);
 }
 
-/** Функция для создания карточки из шаблона:
- * @param {string} newName - подпись к картинке
- * @param {string} link - ссылка на картинку
- * @returns {object} - элемент новой карточки
- */
-function createCard(newName, link) {
-  /** клонируем из шаблона новую карточку */
-  const cardElement = cardTemplate.querySelector('.elements__card').cloneNode(true);
 
-  /** изменяем атрибуты карточки значениями-аргументами */
-  const photoElem = cardElement.querySelector('.elements__photo');
-  photoElem.src=link;
-  photoElem.alt=newName;
 
-  const titleElem = cardElement.querySelector('.elements__title');
-  titleElem.textContent = newName;
+// /** Функция для создания карточки из шаблона:
+//  * @param {string} newName - подпись к картинке
+//  * @param {string} link - ссылка на картинку
+//  * @returns {object} - элемент новой карточки
+//  */
+// function createCard(newName, link) {
+//   /** клонируем из шаблона новую карточку */
+//   const cardElement = cardTemplate.querySelector('.elements__card').cloneNode(true);
 
-  /** добавляем обработчик события кнопке-лайку */
-  const likeButtonElem = cardElement.querySelector('.elements__like-button');
-  likeButtonElem.addEventListener('click', likeCard);
-  /** добавляем обработчик события кнопке trash */
-  const trashButton = cardElement.querySelector('.elements__trash-button');
-  trashButton.addEventListener('click', deleteCard);
-  /** добавляем обработчик события - клик на карточке */
-  photoElem.addEventListener('click', () => showPicture({src:link, name:newName}));
+//   /** изменяем атрибуты карточки значениями-аргументами */
+//   const photoElem = cardElement.querySelector('.elements__photo');
+//   photoElem.src=link;
+//   photoElem.alt=newName;
 
-  return cardElement;
-}
+//   const titleElem = cardElement.querySelector('.elements__title');
+//   titleElem.textContent = newName;
 
-/** Функция для рендеринга карточки:
- * @param {string} newName - подпись к картинке
- * @param {string} link - ссылка на картинку
- * @param {object} elemContainer - контейнер
- */
- function renderCard(newName, link, elemContainer) {
-  /** добавялем карточку в DOM */
-  elemContainer.prepend(createCard(newName,link));
-}
+//   /** добавляем обработчик события кнопке-лайку */
+//   const likeButtonElem = cardElement.querySelector('.elements__like-button');
+//   likeButtonElem.addEventListener('click', likeCard);
+//   /** добавляем обработчик события кнопке trash */
+//   const trashButton = cardElement.querySelector('.elements__trash-button');
+//   trashButton.addEventListener('click', deleteCard);
+//   /** добавляем обработчик события - клик на карточке */
+//   photoElem.addEventListener('click', () => showPicture({src:link, name:newName}));
+
+//   return cardElement;
+// }
+
+
+// /** Функция для рендеринга карточки:
+//  * @param {string} newName - подпись к картинке
+//  * @param {string} link - ссылка на картинку
+//  * @param {object} elemContainer - контейнер
+//  */
+//  function renderCard(newName, link, elemContainer) {
+//   /** добавялем карточку в DOM */
+//   elemContainer.prepend(createCard(newName,link));
+// }
 
 /** Функция для рендеринга карточек при загрузке страницы */
  function loadInitialCards() {
   /** добавляем карточки в DOM*/
+  let cardItem;
    initialCards.forEach((card) => {
-    renderCard(card.name, card.link, elemContainer);
+     cardItem = new Card(card.name, card.link, '#card-template', imagePopup);
+     cardItem.renderCard(elemContainer);
   })
 }
 
@@ -170,7 +182,11 @@ function createCard(newName, link) {
 function saveNewItem(evt) {
   /** Эта строчка отменяет стандартную отправку формы, т.к. мы можем определить свою логику отправки */
   evt.preventDefault();
-  renderCard(mestoNameInput.value, mestoLinkInput.value, elemContainer);
+
+  //renderCard(mestoNameInput.value, mestoLinkInput.value, elemContainer);
+  const cardItem = new Card(mestoNameInput.value, mestoLinkInput.value, '#card-template', imagePopup);
+  cardItem.renderCard(elemContainer);
+
   closePopup(popupAddItem);
 }
 
@@ -230,6 +246,8 @@ function saveProfile(evt) {
 /** Работаем: */
 /** При загрузке на странице должно быть 6 карточек */
 loadInitialCards(initialCards);
+
+
 
 /** назначаем событие - редактируем профиль */
 profileEditButton.addEventListener('click', showEditProfileForm);
