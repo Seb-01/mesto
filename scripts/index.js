@@ -1,53 +1,6 @@
 /** Раздел импорта */
 import {Card} from './card.js';
-import {initialCards} from './cards.js';
-
-
-/** Раздел объявления констант */
-
-/** Kонтейнер с карточками */
-const elemContainer = document.querySelector('.elements');
-
-/** popup формы редактирования профиля */
-const popupEditProfile = document.querySelector('.popup_target_profile');
-
-/** popup формы добавления карточки */
-const popupAddItem = document.querySelector('.popup_target_add-item');
-
-/** popup картинки */
-const imagePopup = document.querySelector('.popup_target_picture-view');
-const pictureElem = imagePopup.querySelector('.popup__picture');
-const captionElem = imagePopup.querySelector('.popup__figure-caption');
-
-/** форма редактирования профиля */
-const profileEditForm = document.querySelector('.popup__edit-profile-form');
-/** форма добавления карточки */
-const itemAddForm = document.querySelector('.popup__add-item-form');
-
-/** кнопка "редактировать профиль" */
-const profileEditButton = document.querySelector('.profile__edit-button');
-/** кнопка "добавить карточку" */
-const itemAddButton = document.querySelector('.profile__add-button');
-
-/** поля input формы редактирования профиля */
-const nameInput = document.querySelector('.popup__input_field_name');
-const jobInput = document.querySelector('.popup__input_field_job');
-
-/** поля в профиле */
-const title = document.querySelector('.profile__title');
-const subtitle = document.querySelector('.profile__subtitle');
-
-/** поля input формы для добавления карточки */
-const mestoNameInput = document.querySelector('.popup__input_field_mesto-name');
-const mestoLinkInput = document.querySelector('.popup__input_field_link');
-
-/** содержание шаблона карточки */
-const cardTemplate = document.querySelector('#card-template').content;
-
-/** кнопкки закрытия popup */
-const popupEditProfileCloseButton = popupEditProfile.querySelector('.popup__close-button');
-const popupAddItemCloseButton = popupAddItem.querySelector('.popup__close-button');
-const imagePopupCloseButton = imagePopup.querySelector('.popup__close-button');
+import {FormValidator} from './FormValidator.js';
 
 /** Раздел объявления функций: */
 
@@ -96,77 +49,9 @@ const imagePopupCloseButton = imagePopup.querySelector('.popup__close-button');
   closePopup(popupOpen);
 }
 
-/** Функция - лайкнуть картинку
- * @param {object} evt - событие
+/** Функция для рендеринга карточек при загрузке страницы
+ *
  */
-function likeCard(evt) {
-  evt.target.classList.toggle('elements__like-button_active');
-}
-
-/** Функция - удалить карточку
- * @param {object} evt - событие
- */
-function deleteCard(evt) {
-  evt.target.closest('.elements__card').remove();
-}
-
-/** Функция - показать картинку
- * @param {object} cardData - данные картинки
- */
-function showPicture(cardData)
-{
-  // заполняем данные в полях
-  pictureElem.src = cardData.src;
-  pictureElem.alt = cardData.name;
-  captionElem.textContent = cardData.name;
-
-  //поднмаем popup
-  showPopup(imagePopup);
-}
-
-
-
-// /** Функция для создания карточки из шаблона:
-//  * @param {string} newName - подпись к картинке
-//  * @param {string} link - ссылка на картинку
-//  * @returns {object} - элемент новой карточки
-//  */
-// function createCard(newName, link) {
-//   /** клонируем из шаблона новую карточку */
-//   const cardElement = cardTemplate.querySelector('.elements__card').cloneNode(true);
-
-//   /** изменяем атрибуты карточки значениями-аргументами */
-//   const photoElem = cardElement.querySelector('.elements__photo');
-//   photoElem.src=link;
-//   photoElem.alt=newName;
-
-//   const titleElem = cardElement.querySelector('.elements__title');
-//   titleElem.textContent = newName;
-
-//   /** добавляем обработчик события кнопке-лайку */
-//   const likeButtonElem = cardElement.querySelector('.elements__like-button');
-//   likeButtonElem.addEventListener('click', likeCard);
-//   /** добавляем обработчик события кнопке trash */
-//   const trashButton = cardElement.querySelector('.elements__trash-button');
-//   trashButton.addEventListener('click', deleteCard);
-//   /** добавляем обработчик события - клик на карточке */
-//   photoElem.addEventListener('click', () => showPicture({src:link, name:newName}));
-
-//   return cardElement;
-// }
-
-
-// /** Функция для рендеринга карточки:
-//  * @param {string} newName - подпись к картинке
-//  * @param {string} link - ссылка на картинку
-//  * @param {object} elemContainer - контейнер
-//  */
-//  function renderCard(newName, link, elemContainer) {
-//   /** добавялем карточку в DOM */
-//   elemContainer.prepend(createCard(newName,link));
-// }
-
-/** Функция для рендеринга карточек при загрузке страницы */
  function loadInitialCards() {
   /** добавляем карточки в DOM*/
   let cardItem;
@@ -190,8 +75,10 @@ function saveNewItem(evt) {
   closePopup(popupAddItem);
 }
 
-/** Функция открытия формы редактирования профиля */
-function showEditProfileForm() {
+/** Функция открытия формы редактирования профиля
+ * @param {object} profileEditFormValidator - экземпляр валидатора
+ */
+function showEditProfileForm(profileEditFormValidator) {
   /** При открытии формы поля «Имя» и «О себе» должны быть заполнены теми значениями,
   которые отображаются на странице */
 
@@ -201,18 +88,15 @@ function showEditProfileForm() {
   /** поднимаем попап */
   showPopup(popupEditProfile);
 
-  // убираем ошибки полей ввода формы
-  clearFormInputError(profileEditForm);
+  // убираем ошибки полей ввода формы и актуализируем состояние кнопки submit
+  profileEditFormValidator.clearFormInputError();
 
-  const inputList =  profileEditForm.querySelectorAll(enableValidationSettings.inputSelector);
-
-  // актуализируем состояние кнопки submit
-  toggleButtonState(inputList, popupEditProfile.querySelector('.popup__save-button'),
-    enableValidationSettings.inactiveButtonClass);
 }
 
-/** Функция открытия формы редактирования профиля */
-function showAddItemForm() {
+/** Функция открытия формы редактирования профиля
+ * @param {object} itemAddFormValidator - экземпляр валидатора
+ */
+function showAddItemForm(itemAddFormValidator) {
 
   // очистим поля от предыдущей "работы"
   itemAddForm.reset();
@@ -220,13 +104,9 @@ function showAddItemForm() {
   /** поднимаем попап */
   showPopup(popupAddItem);
 
-  // убираем ошибки полей ввода формы
-  clearFormInputError(itemAddForm);
+  // убираем ошибки полей ввода формы и актуализируем состояние кнопки submit
+  itemAddFormValidator.clearFormInputError();
 
-  const inputList =  itemAddForm.querySelectorAll(enableValidationSettings.inputSelector);
-  // актуализируем состояние кнопки submit
-  toggleButtonState(inputList, popupAddItem.querySelector('.popup__save-button'),
-    enableValidationSettings.inactiveButtonClass);
 }
 
 /** Функция обновления инфо в профиле
@@ -243,16 +123,22 @@ function saveProfile(evt) {
   closePopup(popupEditProfile);
 }
 
-/** Работаем: */
-/** При загрузке на странице должно быть 6 карточек */
+// Работаем:
+// При загрузке на странице должно быть 6 карточек
 loadInitialCards(initialCards);
 
+//Создаем экземпляр класса FormValidator для profileEditForm
+const profileEditFormValidator = new FormValidator(enableValidationSettings, profileEditForm);
+profileEditFormValidator.enableValidation();
 
+//Создаем экземпляр класса FormValidator для itemAddForm
+const itemAddFormValidator = new FormValidator(enableValidationSettings, itemAddForm);
+itemAddFormValidator.enableValidation();
 
 /** назначаем событие - редактируем профиль */
-profileEditButton.addEventListener('click', showEditProfileForm);
+profileEditButton.addEventListener('click', () => { showEditProfileForm(profileEditFormValidator); });
 /** назначаем событие - добавляем карточку */
-itemAddButton.addEventListener('click', showAddItemForm);
+itemAddButton.addEventListener('click', () => { showAddItemForm(itemAddFormValidator); });
 
 /** обработчик submit в формах */
 profileEditForm.addEventListener('submit', saveProfile);
