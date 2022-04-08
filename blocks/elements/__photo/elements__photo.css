@@ -5,4 +5,11 @@
   border-radius: 10px 10px 0px 0px;
   display: block;
   object-fit: cover;
+  opacity: 1;
+  transition: opacity 0.3s linear;
+}
+
+.elements__photo:hover {
+  cursor: pointer;
+  opacity: 0.6;
 }

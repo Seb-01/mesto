@@ -48,8 +48,6 @@ const popupAddItem = document.querySelector('.popup_target_add-item');
 
 /** popup картинки */
 const imagePopup = document.querySelector('.popup_target_picture-view');
-const pictureElem = imagePopup.querySelector('.popup__picture');
-const captionElem = imagePopup.querySelector('.popup__figure-caption');
 
 /** форма редактирования профиля */
 const profileEditForm = document.querySelector('.popup__edit-profile-form');

@@ -49,16 +49,28 @@ import {FormValidator} from './FormValidator.js';
   closePopup(popupOpen);
 }
 
+/** Функция для создания новой карточки и ее вставки в DOM
+ *
+ * @param {string} newName
+ * @param {string} newLink
+ * @param {string} cardTemplate
+ * @param {object} imagePopup
+ */
+function createCard(newName, newLink, cardTemplate, imagePopup) {
+  // создаем экземпляр карточки
+  const cardItem = new Card(newName, newLink, cardTemplate, imagePopup);
+  //рендерим карточку
+  elemContainer.prepend(cardItem.prepareCard());
+}
+
 /** Функция для рендеринга карточек при загрузке страницы
  *
  */
  function loadInitialCards() {
-  /** добавляем карточки в DOM*/
   let cardItem;
    initialCards.forEach((card) => {
-     cardItem = new Card(card.name, card.link, '#card-template', imagePopup);
-     cardItem.renderCard(elemContainer);
-  })
+     createCard(card.name, card.link, '#card-template', imagePopup);
+  });
 }
 
 /** Функция рендеринга новой карточки
@@ -68,9 +80,8 @@ function saveNewItem(evt) {
   /** Эта строчка отменяет стандартную отправку формы, т.к. мы можем определить свою логику отправки */
   evt.preventDefault();
 
-  //renderCard(mestoNameInput.value, mestoLinkInput.value, elemContainer);
-  const cardItem = new Card(mestoNameInput.value, mestoLinkInput.value, '#card-template', imagePopup);
-  cardItem.renderCard(elemContainer);
+  // создаем экземпляр карточки и вставляем в DOM
+  createCard(mestoNameInput.value, mestoLinkInput.value, '#card-template', imagePopup);
 
   closePopup(popupAddItem);
 }

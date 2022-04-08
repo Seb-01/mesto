@@ -12,6 +12,9 @@ export class Card {
     this._image = image;
     this._templateSelector = templateSelector;
     this._popupElem = popupElem;
+
+    this._pictureElem = popupElem.querySelector('.popup__picture');
+    this._captionElem = popupElem.querySelector('.popup__figure-caption');
   }
 
   /** Функция, которая вернет разметку для карточки
@@ -26,9 +29,9 @@ export class Card {
     .querySelector('.elements__card')
     .cloneNode(true);
 
-  // вернём DOM-элемент карточки
+    // вернём DOM-элемент карточки
     return cardElement;
-}
+  }
 
   /** Функция - обработчик клика на кнопке Like
    * @param {object} evt - событие
@@ -41,7 +44,7 @@ export class Card {
    * @param {object} evt - событие
    */
   _deleteCard(evt) {
-    evt.target.closest('.elements__card').remove();
+    this._element.remove();
   }
 
 
@@ -49,13 +52,10 @@ export class Card {
    *
    */
   _showPicture(cardData, popupElem) {
-    // заполняем данные в полях
-    const pictureElem = popupElem.querySelector('.popup__picture');
-    const captionElem = popupElem.querySelector('.popup__figure-caption');
-
-    pictureElem.src = cardData.src;
-    pictureElem.alt = cardData.name;
-    captionElem.textContent = cardData.name;
+    // заполняем данные в input полях
+    this._pictureElem.src = cardData.src;
+    this._pictureElem.alt = cardData.name;
+    this._captionElem.textContent = cardData.name;
 
     //поднимаем popup
     showPopup(popupElem);
@@ -84,20 +84,21 @@ export class Card {
   /**  Функция, которая готовит и публикует карточку в DOM
    *
    */
-  renderCard(containerElement) {
+  prepareCard() {
     // Запишем разметку в приватное поле _element. У других элементов появится доступ к ней.
     this._element = this._getTemplate();
+    const photoElem = this._element.querySelector('.elements__photo');
 
     // Добавим данные
-    this._element.querySelector('.elements__photo').src = this._image;
-    this._element.querySelector('.elements__photo').alt = this._text;
+    photoElem.src = this._image;
+    photoElem.alt = this._text;
     this._element.querySelector('.elements__title').textContent = this._text;
 
     // Выставляем слушатели
     this._setEventListeners();
 
-    // опубликуем карточку
-    containerElement.append(this._element);
+    // возвращаем готовую карточку
+    return this._element;
   }
 
 }
