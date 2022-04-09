@@ -49,7 +49,7 @@ import {FormValidator} from './FormValidator.js';
   closePopup(popupOpen);
 }
 
-/** Функция для создания новой карточки и ее вставки в DOM
+/** Функция для создания новой карточки
  *
  * @param {string} newName
  * @param {string} newLink
@@ -59,17 +59,25 @@ import {FormValidator} from './FormValidator.js';
 function createCard(newName, newLink, cardTemplate, imagePopup) {
   // создаем экземпляр карточки
   const cardItem = new Card(newName, newLink, cardTemplate, imagePopup);
+  return cardItem.prepareCard();
+}
+
+/** Функция для вставки карточки в DOM
+ *
+ * @param {object} cardElem
+ */
+ function insertCard(cardElem) {
   //рендерим карточку
-  elemContainer.prepend(cardItem.prepareCard());
+  elemContainer.prepend(cardElem);
 }
 
 /** Функция для рендеринга карточек при загрузке страницы
  *
  */
  function loadInitialCards() {
-  let cardItem;
    initialCards.forEach((card) => {
-     createCard(card.name, card.link, '#card-template', imagePopup);
+     // создаем экземпляр карточки и вставляем в DOM
+     insertCard(createCard(card.name, card.link, '#card-template', imagePopup));
   });
 }
 
@@ -81,7 +89,7 @@ function saveNewItem(evt) {
   evt.preventDefault();
 
   // создаем экземпляр карточки и вставляем в DOM
-  createCard(mestoNameInput.value, mestoLinkInput.value, '#card-template', imagePopup);
+  insertCard(createCard(mestoNameInput.value, mestoLinkInput.value, '#card-template', imagePopup));
 
   closePopup(popupAddItem);
 }
