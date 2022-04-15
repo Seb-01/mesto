@@ -1,6 +1,7 @@
 /** Раздел импорта */
 import {Card} from './card.js';
 import {FormValidator} from './FormValidator.js';
+import {Section} from './Section.js';
 
 /** Раздел объявления функций: */
 
@@ -74,12 +75,14 @@ function createCard(newName, newLink, cardTemplate, imagePopup) {
 /** Функция для рендеринга карточек при загрузке страницы
  *
  */
- function loadInitialCards() {
-   initialCards.forEach((card) => {
-     // создаем экземпляр карточки и вставляем в DOM
-     insertCard(createCard(card.name, card.link, '#card-template', imagePopup));
-  });
-}
+//  function loadInitialCards() {
+//    initialCards.forEach((card) => {
+//      // создаем экземпляр карточки и вставляем в DOM
+//      insertCard(createCard(card.name, card.link, '#card-template', imagePopup));
+//   });
+// }
+
+
 
 /** Функция рендеринга новой карточки
  * @param {object} evt - событие
@@ -88,8 +91,10 @@ function saveNewItem(evt) {
   /** Эта строчка отменяет стандартную отправку формы, т.к. мы можем определить свою логику отправки */
   evt.preventDefault();
 
-  // создаем экземпляр карточки и вставляем в DOM
-  insertCard(createCard(mestoNameInput.value, mestoLinkInput.value, '#card-template', imagePopup));
+  //создаем карточку
+  const card = new Card(mestoNameInput.value, mestoLinkInput.value, '#card-template', imagePopup);
+  // подготовка карточки и добавление его в контейнер
+  cardsList.addItem(card.prepareCard());
 
   closePopup(popupAddItem);
 }
@@ -144,7 +149,20 @@ function saveProfile(evt) {
 
 // Работаем:
 // При загрузке на странице должно быть 6 карточек
-loadInitialCards(initialCards);
+// создаем экземпляр класса Section, который отвечает за отрисовку элементов на странице
+const cardsList = new Section({data: initialCards, renderer: ({name: newName, link: newLink}) => {
+    //создаем карточку
+    // constructor(text, image, templateSelector, popupElem)
+    const imagePopup = document.querySelector('.popup_target_picture-view');
+    const card = new Card(newName, newLink, '#card-template', imagePopup);
+    // подготовка карточки и добавление его в контейнер
+    cardsList.addItem(card.prepareCard());
+  }
+}, '.elements');
+
+// отрисовываем карточки при начальной загрузке страницы
+cardsList.renderItems();
+
 
 //Создаем экземпляр класса FormValidator для profileEditForm
 const profileEditFormValidator = new FormValidator(enableValidationSettings, profileEditForm);
