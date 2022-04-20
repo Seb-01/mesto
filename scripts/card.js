@@ -1,4 +1,4 @@
-import {showPopup} from './index.js';
+//import {showPopup} from './index.js';
 
 /** Класс Card, который создаёт карточку с текстом и ссылкой на изображение
  *
@@ -6,15 +6,13 @@ import {showPopup} from './index.js';
 export class Card {
   // в конструкторе будут динамические данные,
   // для каждого экземпляра свои: карточка с текстом, с ссылкой на изображение и селектор её template-элемента;
-  constructor(text, image, templateSelector, popupElem) {
+  constructor(text, image, templateSelector, popupElem, handleCardClick) {
     // приватные поля, они нужны только внутри класса
     this._text = text;
     this._image = image;
     this._templateSelector = templateSelector;
     this._popupElem = popupElem;
-
-    this._pictureElem = popupElem.querySelector('.popup__picture');
-    this._captionElem = popupElem.querySelector('.popup__figure-caption');
+    this._handleCardClick = handleCardClick;
   }
 
   /** Функция, которая вернет разметку для карточки
@@ -47,20 +45,6 @@ export class Card {
     this._element.remove();
   }
 
-
-  /** Функция - обработчик клика на изображении карточки
-   *
-   */
-  _showPicture(cardData, popupElem) {
-    // заполняем данные в input полях
-    this._pictureElem.src = cardData.src;
-    this._pictureElem.alt = cardData.name;
-    this._captionElem.textContent = cardData.name;
-
-    //поднимаем popup
-    showPopup(popupElem);
-  }
-
   /** Функция, которая навешивает слушатели
    *
    */
@@ -76,11 +60,10 @@ export class Card {
     })
 
     // клик на изображении карточки
-    this._element.querySelector('.elements__photo').addEventListener('click', () => {
-      this._showPicture({src: this._image, name: this._text}, this._popupElem);
-    })
-
+    //обработчик в конструкторе получили
+    this._element.querySelector('.elements__photo').addEventListener('click', this._handleCardClick);
   }
+
   /**  Функция, которая подготавливает карточку на основе шаблона
    *
    */

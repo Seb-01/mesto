@@ -36,18 +36,13 @@ const enableValidationSettings = {
   errorClass: 'popup__input-error_active'
 };
 
+// Объект с настройками пользователя
+const userInfoSettings = {
+  name: 'Жак-Ив-Кусто',
+  about_self: 'Исследователь океана',
+};
+
 /** Раздел объявления констант */
-/** Kонтейнер с карточками */
-const elemContainer = document.querySelector('.elements');
-
-/** popup формы редактирования профиля */
-const popupEditProfile = document.querySelector('.popup_target_profile');
-
-/** popup формы добавления карточки */
-const popupAddItem = document.querySelector('.popup_target_add-item');
-
-/** popup картинки */
-const imagePopup = document.querySelector('.popup_target_picture-view');
 
 /** форма редактирования профиля */
 const profileEditForm = document.querySelector('.popup__edit-profile-form');
@@ -68,14 +63,3 @@ const jobInput = document.querySelector('.popup__input_field_job');
 const title = document.querySelector('.profile__title');
 const subtitle = document.querySelector('.profile__subtitle');
 
-/** поля input формы для добавления карточки */
-const mestoNameInput = document.querySelector('.popup__input_field_mesto-name');
-const mestoLinkInput = document.querySelector('.popup__input_field_link');
-
-/** содержание шаблона карточки */
-const cardTemplate = document.querySelector('#card-template').content;
-
-/** кнопкки закрытия popup */
-const popupEditProfileCloseButton = popupEditProfile.querySelector('.popup__close-button');
-const popupAddItemCloseButton = popupAddItem.querySelector('.popup__close-button');
-const imagePopupCloseButton = imagePopup.querySelector('.popup__close-button');
