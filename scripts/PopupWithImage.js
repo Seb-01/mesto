@@ -28,7 +28,7 @@ import {Popup} from './Popup.js';
   */
  open() {
 
-    //
+    // сообщаем popup данные картинки, которую поднимаем
     this._pictureElem.src = this._cardImage;
     this._pictureElem.alt = this._cardText;
     this._captionElem.textContent = this._cardText;
