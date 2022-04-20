@@ -14,10 +14,12 @@ import { UserInfo } from './UserInfo.js';
  function createCard(newName, newLink, cardTemplate, imagePopup) {
   //создаем карточку:
   const card = new Card(newName, newLink, cardTemplate, imagePopup,
-  () => {
-    //эта функция должна открывать попап с картинкой при клике на карточку
-    card._popupElem.open(card._text, card._image);
-  }
+    //эта функция-обработчик должна открывать попап с картинкой при клике на карточку
+    () => {
+      // передаем в popup данные поднимаемой карточки
+      card._popupElem.setCardData(card._text, card._image);
+      card._popupElem.open();
+    }
   );
 
   // подготовка карточки и добавление его в контейнер

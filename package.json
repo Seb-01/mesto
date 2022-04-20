@@ -1,0 +1,19 @@
+{
+  "name": "mesto",
+  "version": "1.0.0",
+  "description": "Learning project Mesto",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Seb-01/mesto.git"
+  },
+  "author": "Vyacheslav Beketov",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Seb-01/mesto/issues"
+  },
+  "homepage": "https://github.com/Seb-01/mesto#readme"
+}

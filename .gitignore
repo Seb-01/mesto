@@ -1,3 +1,6 @@
 *.zip
 .editorconfig
 Inter-3.19/
+node_modules
+dist
+
