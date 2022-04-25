@@ -3,15 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./pages/index.css" />
+    <!-- <link rel="stylesheet" href="./pages/index.css" /> -->
     <title>Mesto</title>
   </head>
   <body class="page">
     <!-- header -->
+    <!---->
     <header class="header">
+      <!-- ссылку в img оформим как требует webpack -->
       <img
         class="header__logo"
-        src="./images/logo_mesto_header.svg"
+        src="<%=require('./images/logo_mesto_header.svg')%>"
         alt="Лого Mesto Russia"
       />
     </header>
@@ -21,7 +23,7 @@
       <section class="profile">
         <img
           class="profile__avatar"
-          src="./images/photo_j_i_kusto.jpg"
+          src="<%=require('./images/photo_j_i_kusto.jpg')%>"
           alt="Аватар пользователя"
         />
 
@@ -177,7 +179,8 @@
       </article>
     </template>
 
+    <!--
     <script src="./scripts/constants.js"></script>
-    <script type="module" src="./scripts/index.js"></script>
+    <script type="module" src="./scripts/index.js"></script> -->
   </body>
 </html>

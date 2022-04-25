@@ -1,9 +1,12 @@
+import {title} from './constants';
+import {subtitle} from './constants';
+
 /** Класс UserInfo, который отвечает за управление отображением информации о пользователе на странице
  *
  */
  export class UserInfo {
   constructor(userInfo) {
-    this._userName = userInfo.name;
+    this._userName = userInfo.user_name;
     this._userAboutSelf = userInfo.about_self;
     // обновим данные в разметке
     title.textContent=this._userName;
@@ -15,7 +18,7 @@
  * @returns {object} userInfo
  */
 getUserInfo() {
-  return {name: this._userName, about_self: this._userAboutSelf};
+  return {user_name: this._userName, about_self: this._userAboutSelf};
 }
 
 /** Публичный метод, который принимает новые данные пользователя и добавляет их на страницу
@@ -24,7 +27,7 @@ getUserInfo() {
  */
 setUserInfo(userInfo) {
   // сохраним данные пользователя
-  this._userName = userInfo.name;
+  this._userName = userInfo.user_name;
   this._userAboutSelf = userInfo.about_self;
   // обновим данные в разметке
   title.textContent=this._userName;
