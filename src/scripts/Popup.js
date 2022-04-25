@@ -4,6 +4,7 @@
  export class Popup {
   constructor(popupSelector) {
     this._popup = document.querySelector(popupSelector);
+    this._handleEscClose = this._handleEscClose.bind(this);
   }
 
 
@@ -14,7 +15,7 @@
   this._popup.classList.add('popup_opened');
   // добавялем обработчики закрытия по Esc. Заботимся о контексте
   // клик мыши на overlay мы добавляем один раз (!) при создании popup
-  document.addEventListener('keydown', this._handleEscClose.bind(this));
+  document.addEventListener('keydown', this._handleEscClose);
  }
 
  /** Публичный метод, который отвечает за закрытие popup
@@ -24,7 +25,7 @@
   // Закрываем popup
   this._popup.classList.remove('popup_opened');
   // убираем обработчик Esc. Заботимся о контексте
-  document.removeEventListener('keydown', this._handleEscClose.bind(this));
+  document.removeEventListener('keydown', this._handleEscClose);
  }
 
  /** Приватный метод, который содержит логику закрытия попапа клавишей Esc
@@ -33,7 +34,6 @@
  _handleEscClose(evt) {
   // если нажали Esc - закрываем popup
   if(evt.key === 'Escape') {
-    // какой попап открыт?
     this.close();
   }
 }

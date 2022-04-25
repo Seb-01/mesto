@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin'); // подключит�
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
-  entry: './src/scripts/index.js',
+  entry: './src/pages/index.js',
   output: {
       path: path.resolve(__dirname, 'dist'),
       //filename: 'project.mesto.js',
@@ -23,6 +23,8 @@ module.exports = {
 
     open: true // сайт будет открываться сам при запуске npm run dev
   },
+
+  devtool: 'source-map',
 
   module: {
     rules: [ // rules — это массив правил
@@ -81,7 +83,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/index.html' // путь к файлу index.html
     }),
-    new MiniCssExtractPlugin() // подключение плагина для объединения файлов
+    new MiniCssExtractPlugin({
+      filename: "[name].[contenthash].css",
+  }) // подключение плагина для объединения файлов
   ]
 
 }

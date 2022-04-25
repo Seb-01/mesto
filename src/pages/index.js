@@ -1,24 +1,24 @@
 // Раздел импорта
 // для webpack в точке входа нужно указать главный css файл
 // и подключить все остальные js
-import '../pages/index.css';
-import {initialCards} from './constants.js';
-import {enableValidationSettings} from './constants.js';
-import {userInfoSettings} from './constants.js';
-import {profileEditForm} from './constants.js';
-import {itemAddForm} from './constants.js';
-import {profileEditButton} from './constants.js';
-import {itemAddButton} from './constants.js';
-import {nameInput} from './constants.js';
-import {jobInput} from './constants.js';
+import './index.css';
+import {initialCards} from '../scripts/constants.js';
+import {enableValidationSettings} from '../scripts/constants.js';
+import {userInfoSettings} from '../scripts/constants.js';
+import {profileEditForm} from '../scripts/constants.js';
+import {itemAddForm} from '../scripts/constants.js';
+import {profileEditButton} from '../scripts/constants.js';
+import {itemAddButton} from '../scripts/constants.js';
+import {nameInput} from '../scripts/constants.js';
+import {jobInput} from '../scripts/constants.js';
 
 
-import {Card} from './card.js';
-import {FormValidator} from './FormValidator.js';
-import {Section} from './Section.js';
-import { PopupWithImage } from './PopupWithImage.js';
-import { PopupWithForm } from './PopupWithForm.js';
-import { UserInfo } from './UserInfo.js';
+import { Card } from '../scripts/Card.js';
+import { FormValidator } from '../scripts/FormValidator.js';
+import { Section } from '../scripts/Section.js';
+import { PopupWithImage } from '../scripts/PopupWithImage.js';
+import { PopupWithForm } from '../scripts/PopupWithForm.js';
+import { UserInfo } from '../scripts/UserInfo.js';
 
 // Раздел объявления функций:
 

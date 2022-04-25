@@ -43,6 +43,8 @@ export class Card {
    */
   _deleteCard(evt) {
     this._element.remove();
+    // После удаления this._element лучше зануллить
+    this._element = null;
   }
 
   /** Функция, которая навешивает слушатели
