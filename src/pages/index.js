@@ -2,9 +2,9 @@
 // для webpack в точке входа нужно указать главный css файл
 // и подключить все остальные js
 import './index.css';
-import {initialCards} from '../scripts/constants.js';
+
 import {enableValidationSettings} from '../scripts/constants.js';
-import {userInfoSettings} from '../scripts/constants.js';
+
 import {profileEditForm} from '../scripts/constants.js';
 import {itemAddForm} from '../scripts/constants.js';
 import {profileEditButton} from '../scripts/constants.js';
@@ -67,9 +67,9 @@ function showAddItemForm(itemAddFormValidator) {
   itemAddFormValidator.clearFormInputError();
 }
 
-
 // Работаем:
-const user = new UserInfo(userInfoSettings);
+const user = new UserInfo('.profile__avatar');
+user.setUserInfo();
 
 // Создаем popup для отображения карточки:
 const imagePopup = new PopupWithImage('.popup_target_picture-view');
@@ -94,7 +94,6 @@ const addItemFormPopup = new PopupWithForm('.popup_target_add-item',
 // устанавливаем слушатели
 addItemFormPopup.setEventListeners();
 
-
 // Создаем экземпляр класса FormValidator для profileEditForm
 const profileEditFormValidator = new FormValidator(enableValidationSettings, profileEditForm);
 profileEditFormValidator.enableValidation();
@@ -109,8 +108,7 @@ profileEditButton.addEventListener('click', () => { showEditProfileForm(profileE
 // назначаем событие - нажали на кнопку "Добавить карточку"
 itemAddButton.addEventListener('click', () => { showAddItemForm(itemAddFormValidator); });
 
-// создаем экземпляр класса Section, который отвечает за отрисовку элементов на странице
-const cardsList = new Section({data: initialCards, renderer:
+const cardsList = new Section({renderer:
   ({name: newName, link: newLink}) => {
     createCard(newName, newLink, '#card-template', imagePopup);
   }
@@ -118,3 +116,5 @@ const cardsList = new Section({data: initialCards, renderer:
 
 // отрисовываем карточки при начальной загрузке страницы
 cardsList.renderItems();
+
+
