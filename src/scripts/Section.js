@@ -7,7 +7,6 @@ import { getFetchResult } from '../scripts/auxfunc.js';
  */
  export class Section {
   constructor({ renderer }, containerSelector) {
-    //this._renderedItems = data; //свойство = массив данных, которые нужно добавить на страницу при инициализации класса
     this._renderer = renderer; // Свойство = функция, которая отвечает за создание и отрисовку данных на странице
     this._container = document.querySelector(containerSelector);
  }
@@ -17,7 +16,7 @@ import { getFetchResult } from '../scripts/auxfunc.js';
   *
   */
  renderItems() {
-  // запрос к серверу
+  // запрос к серверу за карточками
   getFetchResult(`https://mesto.nomoreparties.co/v1/${cohort}/cards`,
     { method: "GET",
       headers: {
@@ -37,8 +36,34 @@ import { getFetchResult } from '../scripts/auxfunc.js';
 
  /** Публичный метод, который принимает DOM-элемент и добавляет его в контейнер
   *
+  * @param {object} element - новая карточка
   */
  addItem(element) {
-  this._container.prepend(element);
+  // Нужны данные карточки:
+  const photoElem = element.querySelector('.elements__photo');
+
+
+  getFetchResult(`https://mesto.nomoreparties.co/v1/${cohort}/cards`,
+  { method: "POST",
+    headers: {
+      authorization: token,
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: photoElem.alt,
+        link: photoElem.src
+      })
+    },
+  // сall-back, который будет вызван, как только данные будут готовы!
+  (result) => {
+    // добавялем карточку!
+    this._container.prepend(element);
+  },
+  // сall-back, который будет вызван в случае ошибки!
+  (err) => {
+  }
+);
+
+
  }
 }
