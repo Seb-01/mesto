@@ -24,13 +24,13 @@ import { getFetchResult } from '../scripts/auxfunc.js';
   }
 
   /** Публичный метод, который загружает и сохраняет данные пользователя на сервере
-   *
+   * newData, needSave
    *
    */
-  setUserInfo(newData) {
+  setUserInfo(newData, needSave) {
 
-    //если пришли "готовые" данные
-    if (newData) {
+    //если пришли "готовые" данные, которые требуется сохранить на сервере
+    if (needSave) {
       //необходимо сохранить данные на сервере
       getFetchResult(`https://mesto.nomoreparties.co/v1/${cohort}/users/me`,
         { method: "PATCH",
@@ -39,8 +39,8 @@ import { getFetchResult } from '../scripts/auxfunc.js';
             'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-              name: newData.user_name,
-              about: newData.about_self
+              name: newData.name,
+              about: newData.about
             })
           },
         // сall-back, который будет вызван, как только данные будут готовы!
@@ -57,40 +57,22 @@ import { getFetchResult } from '../scripts/auxfunc.js';
         // сall-back, который будет вызван в случае ошибки!
         (err) => {
           // обновим данные в разметке
-          //title.textContent=this._userName;
-          //subtitle.textContent=this._userAboutSelf;
-        }
-      );
-    }
-    else {
-      // запрос к серверу
-      getFetchResult(`https://nomoreparties.co/v1/${cohort}/users/me`,
-        { method: "GET",
-          headers: {
-            authorization: token
-            }
-          },
-        // сall-back, который будет вызван, как только данные будут готовы!
-        (result) => {
-          // получим имя и род занятий
-          this._userName = result.name;
-          this._userAboutSelf = result.about;
-          this._avatar = result.avatar;
-
-          // обновим данные в разметке
-          title.textContent = this._userName;
-          subtitle.textContent = this._userAboutSelf;
-          this._avatarElem.src = this._avatar;
-        },
-        // сall-back, который будет вызван в случае ошибки!
-        (err) => {
-          // обновим данные в разметке
           title.textContent=this._userName;
           subtitle.textContent=this._userAboutSelf;
         }
       );
     }
-  }
+    else {
+      // получили "готовые" данные с сервера: имя и род занятий
+      this._userName = newData.name;
+      this._userAboutSelf = newData.about;
+      this._avatar = newData.avatar;
 
+      // обновим данные в разметке
+      title.textContent = this._userName;
+      subtitle.textContent = this._userAboutSelf;
+      this._avatarElem.src = this._avatar;
+    }
+  }
 
 }

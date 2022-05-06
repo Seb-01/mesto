@@ -20,19 +20,28 @@ import { PopupWithImage } from '../scripts/PopupWithImage.js';
 import { PopupWithForm } from '../scripts/PopupWithForm.js';
 import { UserInfo } from '../scripts/UserInfo.js';
 
+import {cohort} from '../scripts/constants.js';
+import {token} from '../scripts/constants.js';
+
+
 // Раздел объявления функций:
 
 /** Функция для создания карточки
  *
  */
- function createCard(newName, newLink, cardTemplate, imagePopup) {
+ function createCard(owner, newName, newLink, newlikes, cardTemplate, imagePopup) {
+  //console.log(newlikes);
   //создаем карточку:
-  const card = new Card(newName, newLink, cardTemplate, imagePopup,
+  const card = new Card(owner, newName, newLink, newlikes, cardTemplate, imagePopup,
     //эта функция-обработчик должна открывать попап с картинкой при клике на карточку
     () => {
       // передаем в popup данные поднимаемой карточки
       card._popupElem.setCardData(card._text, card._image);
       card._popupElem.open();
+    },
+    // функция подтверждения удаления карточки
+    () => {
+      confirmFormPopup.open();
     }
   );
 
@@ -69,7 +78,6 @@ function showAddItemForm(itemAddFormValidator) {
 
 // Работаем:
 const user = new UserInfo('.profile__avatar');
-user.setUserInfo();
 
 // Создаем popup для отображения карточки:
 const imagePopup = new PopupWithImage('.popup_target_picture-view');
@@ -80,7 +88,7 @@ const profileFormPopup = new PopupWithForm('.popup_target_profile',
   //вторым параметром передаем колбэк сабмита формы, т.к. нужно учесть логику формы
   (formData) => {
     // сохраняем новые значения user
-    user.setUserInfo({user_name: formData.name, about_self: formData.job});
+    user.setUserInfo({name: formData.name, about: formData.job}, true);
   });
 // устанавливаем слушатели
 profileFormPopup.setEventListeners();
@@ -89,10 +97,19 @@ profileFormPopup.setEventListeners();
 const addItemFormPopup = new PopupWithForm('.popup_target_add-item',
   //вторым параметром передаем колбэк сабмита формы, т.к. нужно учесть логику формы
   (formData) => {
-    createCard(formData.name, formData.link, '#card-template', imagePopup);
+    createCard(user.getUserInfo().user_name, formData.name, formData.link, '#card-template', imagePopup);
   });
 // устанавливаем слушатели
 addItemFormPopup.setEventListeners();
+
+// создаем экземпляр класса PopupWithForm для подтверждения удаления карточки
+const confirmFormPopup = new PopupWithForm('.popup_target_confirm',
+  //вторым параметром передаем колбэк сабмита формы, т.к. нужно учесть логику формы
+  () => {
+    ;
+  });
+// устанавливаем слушатели
+confirmFormPopup.setEventListeners();
 
 // Создаем экземпляр класса FormValidator для profileEditForm
 const profileEditFormValidator = new FormValidator(enableValidationSettings, profileEditForm);
@@ -109,12 +126,34 @@ profileEditButton.addEventListener('click', () => { showEditProfileForm(profileE
 itemAddButton.addEventListener('click', () => { showAddItemForm(itemAddFormValidator); });
 
 const cardsList = new Section({renderer:
-  ({name: newName, link: newLink}) => {
-    createCard(newName, newLink, '#card-template', imagePopup);
+  ({name: newName, link: newLink, likes: newLikes}) => {
+    createCard(user.getUserInfo().user_name, newName, newLink, newLikes, '#card-template', imagePopup);
   }
 }, '.elements');
 
-// отрисовываем карточки при начальной загрузке страницы
-cardsList.renderItems();
+// В процессе загрузки сайта Загружаем данные с сервера: профиль пользователя и карточки
+// запускаем несколько промисов параллельно: для загрузки профиля и начальных карточек
+const promiseUser = fetch(`https://nomoreparties.co/v1/${cohort}/users/me`,
+    { method: "GET",
+      headers: {
+        authorization: token
+        }
+      }).then((response) => response.json());
 
 
+const promiseCards = fetch(`https://mesto.nomoreparties.co/v1/${cohort}/cards`,
+  { method: "GET",
+    headers: {
+      authorization: token
+      }
+  }).then((response) => response.json());
+
+Promise.all([promiseUser, promiseCards])
+  .then (data => {
+    // профил пользователя сохраняем
+    user.setUserInfo(data[0], false);
+    // получаем карточки
+    cardsList.setCardItems(data[1]);
+    // отрисовываем карточки при начальной загрузке страницы
+    cardsList.renderItems();
+  })

@@ -89,8 +89,8 @@
               />
               <span class="popup__input-error job-input-error"></span>
             </label>
-            <button class="popup__save-button" type="submit">Сохранить</button>
           </fieldset>
+          <button class="popup__save-button" type="submit">Сохранить</button>
         </form>
         <button
           class="popup__close-button"
@@ -133,8 +133,8 @@
               />
               <span class="popup__input-error link-input-error"></span>
             </label>
-            <button class="popup__save-button" type="submit">Создать</button>
           </fieldset>
+          <button class="popup__save-button" type="submit">Создать</button>
         </form>
         <button
           class="popup__close-button"
@@ -159,6 +159,25 @@
       </div>
     </div>
 
+    <!-- popup Вы уверены? -->
+    <div class="popup popup_target_confirm">
+      <!-- Форма подтверждения удаления карточки -->
+      <div class="popup__container">
+        <form
+          name="confirm-delete"
+          class="popup__form popup__delete-confirm-form"
+        >
+          <h2 class="popup__title">Вы уверены?</h2>
+          <button class="popup__save-button" type="submit">Да</button>
+        </form>
+        <button
+          class="popup__close-button"
+          type="button"
+          aria-label="Close button"
+        ></button>
+      </div>
+    </div>
+
     <!-- card-template -->
     <template id="card-template">
       <article class="elements__card">
@@ -170,11 +189,14 @@
         <img class="elements__photo" src="#" alt="" />
         <div class="elements__wrapper">
           <h2 class="elements__title"></h2>
-          <button
-            class="elements__like-button"
-            type="button"
-            aria-label="Like button"
-          ></button>
+          <div class="elements__like-zone-wrapper">
+            <button
+              class="elements__like-button"
+              type="button"
+              aria-label="Like button"
+            ></button>
+            <p class="elements__likes-number">0</p>
+          </div>
         </div>
       </article>
     </template>

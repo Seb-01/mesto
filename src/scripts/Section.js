@@ -11,27 +11,19 @@ import { getFetchResult } from '../scripts/auxfunc.js';
     this._container = document.querySelector(containerSelector);
  }
 
+/** Публичный метод, который получает массив начальных элементов при загрузке страницы
+  *
+  */
+ setCardItems(arr) {
+  this._renderedItems = Array.from(arr);
+ }
+
 
  /** Публичный метод, который отвечает за отрисовку всех начальных элементов при загрузке страницы
   *
   */
  renderItems() {
-  // запрос к серверу за карточками
-  getFetchResult(`https://mesto.nomoreparties.co/v1/${cohort}/cards`,
-    { method: "GET",
-      headers: {
-        authorization: token
-        }
-    },
-    // сall-back, который будет вызван, как только данные будут готовы!
-    (result) => {
-      this._renderedItems = Array.from(result);
-      this._renderedItems.forEach(item => this._renderer(item));
-    },
-    // сall-back, который будет вызван в случае ошибки!
-    (err) => {
-    }
-  );
+    this._renderedItems.forEach(item => this._renderer(item));
  }
 
  /** Публичный метод, который принимает DOM-элемент и добавляет его в контейнер

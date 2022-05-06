@@ -6,13 +6,16 @@
 export class Card {
   // в конструкторе будут динамические данные,
   // для каждого экземпляра свои: карточка с текстом, с ссылкой на изображение и селектор её template-элемента;
-  constructor(text, image, templateSelector, popupElem, handleCardClick) {
+  constructor(owner, text, image, likes, templateSelector, popupElem, handleCardClick, handleCardDelete) {
     // приватные поля, они нужны только внутри класса
     this._text = text;
     this._image = image;
+    this._likes = likes; // массив лайков карточки
     this._templateSelector = templateSelector;
     this._popupElem = popupElem;
     this._handleCardClick = handleCardClick;
+    this._handleCardDelete = handleCardDelete;
+    this._owner = owner;
   }
 
   /** Функция, которая вернет разметку для карточки
@@ -42,9 +45,12 @@ export class Card {
    * @param {object} evt - событие
    */
   _deleteCard(evt) {
+
+    if (this._handleCardDelete()) {
     this._element.remove();
     // После удаления this._element лучше зануллить
     this._element = null;
+    }
   }
 
   /** Функция, которая навешивает слушатели
@@ -78,6 +84,10 @@ export class Card {
     photoElem.src = this._image;
     photoElem.alt = this._text;
     this._element.querySelector('.elements__title').textContent = this._text;
+    this._element.querySelector('.elements__likes-number').textContent = this._likes.length;
+
+    //иконка trash
+
 
     // Выставляем слушатели
     this._setEventListeners();

@@ -4,11 +4,14 @@
  * @param {object} options { method, headers, body }
  * @param {call back} setResult
  */
- export function getFetchResult(url, options, setResult, setError) {
+
+  // запишем в таком виде, чтобы удобнее было использовать в Promise.all
+  // a function expression
+  export const getFetchResult = function (url, options, setResult, setError) {
   fetch(url, options)
   //  читает ответ от сервера в формате json и возвращаем промис
   .then((res) => {
-    console.log(res);
+    //console.log(res);
     return res.json();
   })
   // затем анализируем результат:
