@@ -24,7 +24,7 @@ import { UserInfo } from '../scripts/UserInfo.js';
 
 import {cohort} from '../scripts/constants.js';
 import {token} from '../scripts/constants.js';
-import { getFetchResult } from '../scripts/auxfunc.js';
+import { Api } from '../scripts/Api.js';
 
 
 // Раздел объявления функций:
@@ -32,16 +32,15 @@ import { getFetchResult } from '../scripts/auxfunc.js';
 /** Функция для создания карточки
  *
  */
- function createCard(userId, newId, newName, newLink, newlikes, cardTemplate, imagePopup) {
-  //console.log(newlikes);
+ function createCard(userId, ownerId, newId, newName, newLink, newlikes, cardTemplate, imagePopup) {
 
   // здесь решаем: будет ли корзина на карточке или нет
   let isTrash = false;
-  if (newId === userId)
+  if (ownerId === userId)
     isTrash = true;
 
   //создаем карточку:
-  const card = new Card(isTrash, userId, newId, newName, newLink, newlikes, cardTemplate, imagePopup,
+  const card = new Card(isTrash, userId, ownerId, newId, newName, newLink, newlikes, cardTemplate, imagePopup,
     //эта функция-обработчик должна открывать попап с картинкой при клике на карточку
     () => {
       // передаем в popup данные поднимаемой карточки
@@ -49,12 +48,49 @@ import { getFetchResult } from '../scripts/auxfunc.js';
       card._popupElem.open();
     },
     // функция подтверждения удаления карточки
-    (card) => {
+    ({cardElem, cardId}) => {
       // привязываем в свойства карточку, на которой нажали кнопку удалить
-      //card: this._element, cardId: this._id
-      confirmFormPopup.cardElem = card.card;
-      confirmFormPopup.cardId = card.cardId;
+      confirmFormPopup.cardElem = cardElem;
+      confirmFormPopup.cardId = cardId;
       confirmFormPopup.open();
+    },
+    //
+    ({cardElem, cardId}) => {
+      const likeButtonElem = cardElem.querySelector('.elements__like-button');
+      const likeNumberElem = cardElem.querySelector('.elements__likes-number');
+
+      // если карточку уже лайкали
+      if(likeButtonElem.classList.contains('elements__like-button_active')) {
+        api.deleteLike(cardId)
+          // сall-back, который будет вызван, как только данные будут готовы!
+          .then((result) => {
+            // уменьшаем количество лайков
+            likeNumberElem.textContent = result.likes.length;
+            likeButtonElem.classList.toggle('elements__like-button_active');
+
+          })
+          .catch((err) => {
+            console.log(`Ошибка при dislike карточки: ${err}!`);
+          }
+        );
+      }
+      else {
+        // лайкаем карточку:
+        api.likeCard(cardId)
+        // сall-back, который будет вызван, как только данные будут готовы!
+        .then((result) => {
+          // увеличиваем количество лайков
+          likeNumberElem.textContent = result.likes.length;
+          likeButtonElem.classList.toggle('elements__like-button_active');
+
+        })
+        // сall-back, который будет вызван в случае ошибки!
+        .catch((err) => {
+          console.log(`Ошибка при like карточки: ${err}!`);
+        }
+    );
+
+      }
     }
   );
 
@@ -101,6 +137,16 @@ function showAddItemForm(itemAddFormValidator) {
 }
 
 // Работаем:
+
+// создаем класс для взаимодействия с сервером Mesto
+const api = new Api({
+  baseUrl: `https://mesto.nomoreparties.co/v1/${cohort}`,
+  headers: {
+    authorization: token
+  }
+});
+
+// создаем профиль пользователя
 const user = new UserInfo('.profile__avatar');
 
 // Создаем popup для отображения карточки:
@@ -114,8 +160,22 @@ const profileFormPopup = new PopupWithForm('.popup_target_profile',
     // сохраняем новые значения user
     // На время выполнения запроса меняем текст кнопки submit и не закрываем popup
     const button = document.querySelector('.popup_target_profile').querySelector('.popup__save-button');
-    //user.setUserAvatar(newAvatar, editAvatarFormPopup, button, "Сохранение...");
-    user.setUserInfo({name: formData.name, about: formData.job}, true, profileFormPopup, button, "Сохранение...");
+    const prevButtonText = button.textContent;
+    button.textContent =  'Сохранение...';
+
+    api.saveNewProfile(formData)
+    .then((result) => {
+      user.setUserInfo(result);
+      // закрываем popup после выполнения запроса
+      profileFormPopup.close();
+      button.textContent =  prevButtonText;
+
+    })
+    .catch((err) => {
+      console.log(`Ошибка при сохранении данных профиля пользователя: ${err}!`)
+    }
+  );
+
   });
 // устанавливаем слушатели
 profileFormPopup.setEventListeners();
@@ -131,31 +191,20 @@ const addItemFormPopup = new PopupWithForm('.popup_target_add-item',
     button.textContent =  'Сохранение...';
 
     // вначале отправим карточку на сервер:
-    getFetchResult(`https://mesto.nomoreparties.co/v1/${cohort}/cards`,
-    { method: "POST",
-      headers: {
-        authorization: token,
-        'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          link: formData.link
-        })
-      },
-    // сall-back, который будет вызван, как только данные будут готовы!
-    (result) => {
+    api.addCard(formData)
+    .then((result) => {
       // создаем и добавляем карточку в DOM!
-      createCard(user.getUserInfo().user_id, result._id, result.name, result.link, [], '#card-template', imagePopup);
+      createCard(user.getUserInfo().user_id, result.owner._id, result._id, result.name, result.link, [], '#card-template', imagePopup);
       // теперь только закрываем окно
       addItemFormPopup.close();
       button.textContent =  prevButtonText;
 
-    },
-    // сall-back, который будет вызван в случае ошибки!
-    (err) => {
+    })
+    // если поймали ошибку
+    .catch((err) => {
       console.log(`Ошибка при сохранении карточки: ${err}!`)
     }
-  );
+    );
 });
 
 // устанавливаем слушатели
@@ -163,28 +212,22 @@ addItemFormPopup.setEventListeners();
 
 // создаем экземпляр класса PopupWithForm для подтверждения удаления карточки
 const confirmFormPopup = new PopupWithForm('.popup_target_confirm',
-  //вторым параметром передаем колбэк сабмита формы, т.к. нужно учесть логику формы
+  //вторым параметром передаем колбэк сабмита формы, т.к. нужно учесть логику работы формы
   () => {
-
-    // удаляем элемент с сервера
-    getFetchResult(`https://mesto.nomoreparties.co/v1/${cohort}/cards/${confirmFormPopup.cardId}`,
-      { method: "DELETE",
-        headers: {
-          authorization: token
-        }
-      },
-      // сall-back, который будет вызван, как только данные будут готовы!
-      (result) => {
+      // идем на сервер
+      api.deleteCard(confirmFormPopup)
+      .then((result) => {
         // удалим элемент из DOM
         confirmFormPopup.cardElem.remove();
-        // После удаления element лучше зануллить
+        // после удаления element лучше занулить
         confirmFormPopup.cardElem = null;
-      },
-      // сall-back, который будет вызван в случае ошибки!
-      (err) => {
-        console.log(`Ошибка при удалении карточки: ${err}!`);
-      }
-    )}
+        // закрываем окно:
+        confirmFormPopup.close();
+      })
+      .catch((err) => {
+        console.log(`Ошибка при обработке результатов запроса на удаление карточки : ${err}!`);
+      });
+    }
 );
 
 // устанавливаем слушатели
@@ -194,9 +237,27 @@ confirmFormPopup.setEventListeners();
 const editAvatarFormPopup = new PopupWithForm('.popup_target_update-avatar',
   //вторым параметром передаем колбэк сабмита формы, т.к. нужно учесть логику формы
   (newAvatar) => {
-    // обновляем аватар. На время выполнения запроса меняем текст кнопки submit и не закрываем popup
+
+    // На время выполнения запроса меняем текст кнопки submit и не закрываем popup
     const button = document.querySelector('.popup_target_update-avatar').querySelector('.popup__save-button');
-    user.setUserAvatar(newAvatar, editAvatarFormPopup, button, "Сохранение...");
+    const prevButtonText = button.textContent;
+    button.textContent =  'Сохранение...';
+
+    // вначале отправим данные на сервер:
+    api.updateAvatar(newAvatar)
+    .then((result) => {
+      // создаем и добавляем карточку в DOM!
+      user.setUserAvatar(result.avatar);
+      // теперь только закрываем окно
+      editAvatarFormPopup.close();
+      button.textContent =  prevButtonText;
+
+    })
+    // если поймали ошибку
+    .catch((err) => {
+      console.log(`Ошибка при сохранении аватара: ${err}!`)
+    }
+    );
 }
 );
 
@@ -225,35 +286,23 @@ itemAddButton.addEventListener('click', () => { showAddItemForm(itemAddFormValid
 avatarEditButton.addEventListener('click', () => { showEditAvatarForm(avatarEditFormValidator); });
 
 const cardsList = new Section({renderer:
-  ({_id: newId, name: newName, link: newLink, likes: newLikes}) => {
-    createCard(user.getUserInfo().user_id, newId, newName, newLink, newLikes, '#card-template', imagePopup);
+  ({_id: newId, name: newName, link: newLink, likes: newLikes, owner: {_id: ownerId}}) => {
+    createCard(user.getUserInfo().user_id, ownerId, newId, newName, newLink, newLikes, '#card-template', imagePopup);
   }
 }, '.elements');
 
 // В процессе загрузки сайта загружаем данные с сервера: профиль пользователя и карточки
 // запускаем несколько промисов параллельно: для загрузки профиля и начальных карточек
-const promiseUser = fetch(`https://mesto.nomoreparties.co/v1/${cohort}/users/me`,
-    { method: "GET",
-      headers: {
-        authorization: token
-        }
-      }).then((response) => response.json());
-
-
-const promiseCards = fetch(`https://mesto.nomoreparties.co/v1/${cohort}/cards`,
-  { method: "GET",
-    headers: {
-      authorization: token
-      }
-  }).then((response) => response.json());
+const promiseUser = api.getUserProfile();
+const promiseCards = api.getInitialCards();
 
 Promise.all([promiseUser, promiseCards])
+  // обрабатываем полученные данные
   .then (data => {
-    // профил пользователя сохраняем
-    user.setUserInfo(data[0], false);
+    // профиль пользователя сохраняем
+    user.setUserInfo(data[0]);
     // получаем карточки
     cardsList.setCardItems(data[1]);
-    console.log(data[1]);
     // отрисовываем карточки
     cardsList.renderItems();
   })

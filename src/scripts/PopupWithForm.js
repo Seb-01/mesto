@@ -1,7 +1,5 @@
 import {Popup} from './Popup.js';
 
-
-
 /** Класс PopupWithForm, который отвечает за открытие и закрытие попапа c формой
  *
  */

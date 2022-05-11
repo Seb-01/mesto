@@ -1,4 +1,3 @@
-
 /** Объект с настройками валидации форм */
 export const enableValidationSettings = {
   formSelector: '.popup__form',

@@ -1,7 +1,3 @@
-// import {cohort} from '../scripts/constants.js';
-// import {token} from '../scripts/constants.js';
-// import { getFetchResult } from '../scripts/auxfunc.js';
-
 /** Класс Section, который отвечает за отрисовку элементов на странице
  *
  */
