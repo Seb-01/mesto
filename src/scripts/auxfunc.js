@@ -26,3 +26,15 @@
     setError(err);
   });
 }
+
+// проверка наличия в массиве объекта с заданным свойством _id
+export function checkId(arr, targerId) {
+  // идем по массиву
+  for (let index = 0; index < arr.length; ++index) {
+    if (arr[index]._id === targerId)
+      // как только нашли совпадение - выходим с возвратом true
+      return true;
+  };
+
+ return false;
+}

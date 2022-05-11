@@ -13,25 +13,28 @@ import { getFetchResult } from '../scripts/auxfunc.js';
       this._userName = 'no name';
       this._userAboutSelf = 'no about';
       this._avatarElem = document.querySelector(avatarSelector);
-   }
+    }
 
   /** Публичный метод, который возвращает объект с данными пользователя
    *
    * @returns {object} userInfo
    */
   getUserInfo() {
-    return {user_name: this._userName, about_self: this._userAboutSelf};
+    return {user_name: this._userName, user_id: this._userId, about_self: this._userAboutSelf};
   }
 
   /** Публичный метод, который загружает и сохраняет данные пользователя на сервере
    * newData, needSave
    *
    */
-  setUserInfo(newData, needSave) {
+  setUserInfo(newData, needSave, popupForm, button, loaderText) {
 
-    //если пришли "готовые" данные, которые требуется сохранить на сервере
+    //если пришли данные (имя, род занятий), которые требуется сохранить на сервере
     if (needSave) {
       //необходимо сохранить данные на сервере
+      const prevButtonText = button.textContent;
+      button.textContent =  loaderText;
+
       getFetchResult(`https://mesto.nomoreparties.co/v1/${cohort}/users/me`,
         { method: "PATCH",
           headers: {
@@ -53,6 +56,11 @@ import { getFetchResult } from '../scripts/auxfunc.js';
           // обновим данные в разметке
           title.textContent = this._userName;
           subtitle.textContent = this._userAboutSelf;
+
+          // закрываем popup после выполнения запроса
+          popupForm.close();
+          button.textContent =  prevButtonText;
+
         },
         // сall-back, который будет вызван в случае ошибки!
         (err) => {
@@ -63,10 +71,11 @@ import { getFetchResult } from '../scripts/auxfunc.js';
       );
     }
     else {
-      // получили "готовые" данные с сервера: имя и род занятий
+      // получили данные с сервера: имя, род занятий и аватар
       this._userName = newData.name;
       this._userAboutSelf = newData.about;
       this._avatar = newData.avatar;
+      this._userId = newData._id;
 
       // обновим данные в разметке
       title.textContent = this._userName;
@@ -74,5 +83,38 @@ import { getFetchResult } from '../scripts/auxfunc.js';
       this._avatarElem.src = this._avatar;
     }
   }
+
+ /** Публичный метод, для смены аватара
+ * newAvatar
+ *
+ */
+ setUserAvatar(newAvatar, popupForm, button, loaderText) {
+  const prevButtonText = button.textContent;
+  button.textContent =  loaderText;
+  getFetchResult(`https://mesto.nomoreparties.co/v1/${cohort}/users/me/avatar`,
+    { method: "PATCH",
+    headers: {
+      authorization: token,
+      'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        avatar: newAvatar.link
+      })
+    },
+      // сall-back, который будет вызван, как только данные будут готовы!
+      (result) => {
+        this._avatar = result.avatar;
+        this._avatarElem.src = this._avatar;
+        // закрываем popup после выполнения запроса
+        popupForm.close();
+        button.textContent =  prevButtonText;
+
+      },
+      // сall-back, который будет вызван в случае ошибки!
+      (err) => {
+        console.log(`Ошибка при смене аватара: ${err}!`);
+      }
+  )
+ }
 
 }

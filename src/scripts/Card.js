@@ -1,4 +1,7 @@
-//import {showPopup} from './index.js';
+import {cohort} from '../scripts/constants.js';
+import {token} from '../scripts/constants.js';
+import { getFetchResult } from '../scripts/auxfunc.js';
+import { checkId } from '../scripts/auxfunc.js';
 
 /** Класс Card, который создаёт карточку с текстом и ссылкой на изображение
  *
@@ -6,7 +9,7 @@
 export class Card {
   // в конструкторе будут динамические данные,
   // для каждого экземпляра свои: карточка с текстом, с ссылкой на изображение и селектор её template-элемента;
-  constructor(owner, text, image, likes, templateSelector, popupElem, handleCardClick, handleCardDelete) {
+  constructor(isTrash, userId, id, text, image, likes, templateSelector, popupElem, handleCardClick, handleCardDelete) {
     // приватные поля, они нужны только внутри класса
     this._text = text;
     this._image = image;
@@ -15,7 +18,9 @@ export class Card {
     this._popupElem = popupElem;
     this._handleCardClick = handleCardClick;
     this._handleCardDelete = handleCardDelete;
-    this._owner = owner;
+    this._isTrash = isTrash;
+    this._id = id; // id пользователя, который добавил карточку
+    this._userId = userId; // id пользователя из профиля
   }
 
   /** Функция, которая вернет разметку для карточки
@@ -38,19 +43,58 @@ export class Card {
    * @param {object} evt - событие
    */
   _likeCard(evt) {
-    evt.target.classList.toggle('elements__like-button_active');
+    // если карточку уже лайкнули - то удаляем лайк:
+    if(evt.target.classList.contains('elements__like-button_active')) {
+      getFetchResult(`https://mesto.nomoreparties.co/v1/${cohort}/cards/${this._id}/likes`,
+        { method: "DELETE",
+          headers: {
+            authorization: token
+          }
+        },
+        // сall-back, который будет вызван, как только данные будут готовы!
+        (result) => {
+          // уменьшаем количество лайков
+          this._element.querySelector('.elements__likes-number').textContent = result.likes.length;
+          evt.target.classList.toggle('elements__like-button_active');
+
+        },
+        // сall-back, который будет вызван в случае ошибки!
+        (err) => {
+          console.log(`Ошибка при dislike карточки: ${err}!`);
+        }
+      );
+    }
+    else {
+
+      // лайкаем карточку:
+      getFetchResult(`https://mesto.nomoreparties.co/v1/${cohort}/cards/${this._id}/likes`,
+        { method: "PUT",
+          headers: {
+            authorization: token
+          }
+        },
+        // сall-back, который будет вызван, как только данные будут готовы!
+        (result) => {
+          // уменьшаем количество лайков
+          this._element.querySelector('.elements__likes-number').textContent = result.likes.length;
+          evt.target.classList.toggle('elements__like-button_active');
+
+        },
+        // сall-back, который будет вызван в случае ошибки!
+        (err) => {
+          console.log(`Ошибка при like карточки: ${err}!`);
+        }
+      );
+    }
+
   }
 
   /** Функция - обработчик клика на кнопке trash
    * @param {object} evt - событие
    */
   _deleteCard(evt) {
-
-    if (this._handleCardDelete()) {
-    this._element.remove();
-    // После удаления this._element лучше зануллить
-    this._element = null;
-    }
+      // передаем данные элемента на обработку
+      this._handleCardDelete({card: this._element, cardId: this._id});
   }
 
   /** Функция, которая навешивает слушатели
@@ -86,7 +130,13 @@ export class Card {
     this._element.querySelector('.elements__title').textContent = this._text;
     this._element.querySelector('.elements__likes-number').textContent = this._likes.length;
 
-    //иконка trash
+    // иконка trash
+    if (!this._isTrash)
+      this._element.querySelector('.elements__trash-button').style.display = "none";
+
+    // цвет сердечка: если id есть в likes, то добавляем elements__like-button_active
+    if (checkId(this._likes, this._userId))
+      this._element.querySelector('.elements__like-button').classList.add('elements__like-button_active');
 
 
     // Выставляем слушатели
