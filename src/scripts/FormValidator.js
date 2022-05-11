@@ -89,7 +89,6 @@ export class FormValidator {
     this._toggleButtonState();
 
     this._inputList.forEach((inputElement) => {
-      //inputElement.addEventListener('input', function () {
       inputElement.addEventListener('input', () => {
         this._checkInputValidity(inputElement);
         // актуализируем кнопку submit
