@@ -5,6 +5,9 @@
   constructor(popupSelector) {
     this._popup = document.querySelector(popupSelector);
     this._handleEscClose = this._handleEscClose.bind(this);
+
+    // получаем иконку закрытия popup
+    this._buttonClose = this._popup.querySelector('.popup__close-button');
   }
 
 
@@ -44,9 +47,6 @@
  setEventListeners() {
 
   this._popup.addEventListener('mousedown', (event) => {
-    // получаем иконку закрытия popup
-    this._buttonClose = this._popup.querySelector('.popup__close-button');
-
     if (event.target !== event.currentTarget && event.target !== this._buttonClose) {
       return;
     }

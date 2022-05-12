@@ -1,23 +1,26 @@
 import {Popup} from './Popup.js';
 
-/** Класс PopupWithForm, который отвечает за открытие и закрытие попапа c формой
+/** Класс PopupWithConfirmation, который отвечает за открытие и закрытие попапа c формой
  *
  */
-export class PopupWithForm extends Popup {
+export class PopupWithConfirmation extends Popup {
   constructor(popupSelector, handleSubmit) {
     super(popupSelector);
     // обработчик submit
     this._handleSubmit = handleSubmit;
+
+    // список input-полей формы, которую "поднимает" popup
+    // возможно, селектор input-полей также следует передавать в конструкторе!
+    this._inputList = this._popup.querySelectorAll('.popup__input');
+    // собственно форма
+    // возможно, селектор формы также следует передавать в конструкторе!
+    this._form = this._popup.querySelector('.popup__form');
  }
 
  /** Приватный метод, который собирает данные всех полей формы
   *
   */
  _getInputValues() {
-    // список input-полей формы, которую "поднимает" popup
-    // возможно, селектор input-полей также следует передавать в конструкторе!
-    this._inputList = this._popup.querySelectorAll('.popup__input');
-
     // создаём пустой объект
     this._formValues = {};
 
@@ -50,10 +53,35 @@ export class PopupWithForm extends Popup {
   */
  close() {
   //нужно очистить поля формы перед закрытием
-  // возможно, селектор формы также следует передавать в конструкторе!
-  this._popup.querySelector('.popup__form').reset();
+  this._form.reset();
 
   super.close();
  }
+
+ /** Удаляет карточку
+  *
+  */
+  deleteCard() {
+    // удалим элемент из DOM
+    this._cardElem.remove();
+    // после удаления element лучше занулить
+    this._cardElem = null;
+  }
+
+  /** Получаем элемент и id карточки, удаление которой подтверждаем
+  * @param {object} cardElem
+  * @param {object} cardId
+  */
+  setCardData(cardElem, cardId) {
+    this._cardElem = cardElem;
+    this._cardId = cardId;
+  }
+
+  /** Функция для возврата id карточки
+   *
+  */
+  getCardId() {
+    return this._cardId;
+  }
 
 }

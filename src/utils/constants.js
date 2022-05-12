@@ -15,7 +15,7 @@ export const token = '42ba884f-b283-49c9-8264-0bf37bf4771e';
 /** форма редактирования профиля */
 export const profileEditForm = document.querySelector('.popup__edit-profile-form');
 
-/** форма обнолвения аватара */
+/** форма обновления аватара */
 export const avatarEditForm = document.querySelector('.popup_target_update-avatar');
 
 /** форма добавления карточки */
@@ -32,7 +32,13 @@ export const avatarEditButton = document.querySelector('.profile__edit-avatar-bu
 export const nameInput = document.querySelector('.popup__input_field_name');
 export const jobInput = document.querySelector('.popup__input_field_job');
 
-/** поля в профиле */
+/** поля в разметке профиля */
 export const title = document.querySelector('.profile__title');
 export const subtitle = document.querySelector('.profile__subtitle');
 
+// кнопка submit формы добавления новой карточки
+export const submitAddItemButton = document.querySelector('.popup_target_add-item').querySelector('.popup__save-button');
+// кнопка submit формы обновления аватара
+export const submitUpdateAvatarButton = document.querySelector('.popup_target_update-avatar').querySelector('.popup__save-button');
+// кнопка submit формы обновления профиля
+export const submitProfileButton = document.querySelector('.popup_target_profile').querySelector('.popup__save-button');

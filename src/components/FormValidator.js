@@ -10,6 +10,12 @@ export class FormValidator {
     this._inputErrorClass = settings.inputErrorClass;
     this._errorClass = settings.errorClass;
     this._formElem = formElem;
+
+    // добавляем в арибуты класса все input-поля формы
+    this._inputList = Array.from(this._formElem.querySelectorAll(this._inputSelector));
+    // добавляем в арибуты класса кнопку submit формы
+    this._buttonElement = this._formElem.querySelector(this._submitButtonSelector);
+
   }
 
   /** Функция проверки списка полей ввода инфо на наличие хоть одной ошибки
@@ -115,11 +121,6 @@ export class FormValidator {
    *
    */
   enableValidation() {
-    // добавляем в арибуты класса все input-поля формы
-    this._inputList = Array.from(this._formElem.querySelectorAll(this._inputSelector));
-    // добавляем в арибуты класса кнопку submit формы
-    this._buttonElement = this._formElem.querySelector(this._submitButtonSelector);
-
     this._setEventListeners ();
   }
 }

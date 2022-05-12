@@ -3,36 +3,52 @@
 // и подключить все остальные js
 import './index.css';
 
-import {enableValidationSettings} from '../scripts/constants.js';
+import { enableValidationSettings } from '../utils/constants.js';
 
-import {profileEditForm} from '../scripts/constants.js';
-import {avatarEditForm} from '../scripts/constants.js';
-import {itemAddForm} from '../scripts/constants.js';
-import {profileEditButton} from '../scripts/constants.js';
-import {avatarEditButton} from '../scripts/constants.js';
-import {itemAddButton} from '../scripts/constants.js';
-import {nameInput} from '../scripts/constants.js';
-import {jobInput} from '../scripts/constants.js';
+import {profileEditForm} from '../utils/constants.js';
+import {avatarEditForm} from '../utils/constants.js';
+import {itemAddForm} from '../utils/constants.js';
+import {profileEditButton} from '../utils/constants.js';
+import {avatarEditButton} from '../utils/constants.js';
+import {itemAddButton} from '../utils/constants.js';
+import {nameInput} from '../utils/constants.js';
+import {jobInput} from '../utils/constants.js';
 
+import { title } from '../utils/constants';
+import { subtitle } from '../utils/constants';
 
-import { Card } from '../scripts/Card.js';
-import { FormValidator } from '../scripts/FormValidator.js';
-import { Section } from '../scripts/Section.js';
-import { PopupWithImage } from '../scripts/PopupWithImage.js';
-import { PopupWithForm } from '../scripts/PopupWithForm.js';
-import { UserInfo } from '../scripts/UserInfo.js';
+import { submitAddItemButton } from '../utils/constants';
+import { submitUpdateAvatarButton } from '../utils/constants';
+import { submitProfileButton } from '../utils/constants';
 
-import {cohort} from '../scripts/constants.js';
-import {token} from '../scripts/constants.js';
-import { Api } from '../scripts/Api.js';
+import { Card } from '../components/Card.js';
+import { FormValidator } from '../components/FormValidator.js';
+import { Section } from '../components/Section.js';
+import { PopupWithImage } from '../components/PopupWithImage.js';
+import { PopupWithForm } from '../components/PopupWithForm.js';
+import { PopupWithConfirmation } from '../components/PopupWithConfirmation.js';
+import { UserInfo } from '../components/UserInfo.js';
+
+import {cohort} from '../utils/constants.js';
+import {token} from '../utils/constants.js';
+import { Api } from '../components/Api.js';
 
 
 // Раздел объявления функций:
 
+/** Функция для замены TextContext элемента
+ *
+ */
+function changeTextContext(element, newText) {
+  const previosText = element.textContent;
+  element.textContent = newText;
+  return previosText;
+}
+
 /** Функция для создания карточки
  *
  */
- function createCard(userId, ownerId, newId, newName, newLink, newlikes, cardTemplate, imagePopup) {
+function createCard(userId, ownerId, newId, newName, newLink, newlikes, cardTemplate, imagePopup) {
 
   // здесь решаем: будет ли корзина на карточке или нет
   let isTrash = false;
@@ -41,33 +57,21 @@ import { Api } from '../scripts/Api.js';
 
   //создаем карточку:
   const card = new Card(isTrash, userId, ownerId, newId, newName, newLink, newlikes, cardTemplate, imagePopup,
-    //эта функция-обработчик должна открывать попап с картинкой при клике на карточку
-    () => {
-      // передаем в popup данные поднимаемой карточки
-      card._popupElem.setCardData(card._text, card._image);
-      card._popupElem.open();
-    },
-    // функция подтверждения удаления карточки
+     // функция подтверждения удаления карточки
     ({cardElem, cardId}) => {
-      // привязываем в свойства карточку, на которой нажали кнопку удалить
-      confirmFormPopup.cardElem = cardElem;
-      confirmFormPopup.cardId = cardId;
+      // передаем данные карточки, на которой нажали кнопку удалить
+      confirmFormPopup.setCardData(cardElem, cardId);
       confirmFormPopup.open();
     },
-    //
-    ({cardElem, cardId}) => {
-      const likeButtonElem = cardElem.querySelector('.elements__like-button');
-      const likeNumberElem = cardElem.querySelector('.elements__likes-number');
-
+    // Функция-обработчик лайк-дислайка карточки
+    (cardId) => {
       // если карточку уже лайкали
-      if(likeButtonElem.classList.contains('elements__like-button_active')) {
+      if(card.isLike()) {
         api.deleteLike(cardId)
           // сall-back, который будет вызван, как только данные будут готовы!
           .then((result) => {
-            // уменьшаем количество лайков
-            likeNumberElem.textContent = result.likes.length;
-            likeButtonElem.classList.toggle('elements__like-button_active');
-
+            // обновляем количество лайков
+            card.updateLike(result.likes.length);
           })
           .catch((err) => {
             console.log(`Ошибка при dislike карточки: ${err}!`);
@@ -79,9 +83,8 @@ import { Api } from '../scripts/Api.js';
         api.likeCard(cardId)
         // сall-back, который будет вызван, как только данные будут готовы!
         .then((result) => {
-          // увеличиваем количество лайков
-          likeNumberElem.textContent = result.likes.length;
-          likeButtonElem.classList.toggle('elements__like-button_active');
+            // обновляем количество лайков
+            card.updateLike(result.likes.length);
 
         })
         // сall-back, который будет вызван в случае ошибки!
@@ -147,7 +150,7 @@ const api = new Api({
 });
 
 // создаем профиль пользователя
-const user = new UserInfo('.profile__avatar');
+const user = new UserInfo('.profile__avatar', title, subtitle);
 
 // Создаем popup для отображения карточки:
 const imagePopup = new PopupWithImage('.popup_target_picture-view');
@@ -159,9 +162,7 @@ const profileFormPopup = new PopupWithForm('.popup_target_profile',
   (formData) => {
     // сохраняем новые значения user
     // На время выполнения запроса меняем текст кнопки submit и не закрываем popup
-    const button = document.querySelector('.popup_target_profile').querySelector('.popup__save-button');
-    const prevButtonText = button.textContent;
-    button.textContent =  'Сохранение...';
+    const prevButtonText = changeTextContext(submitProfileButton, 'Сохранение...');
 
     api.saveNewProfile(formData)
     .then((result) => {
@@ -173,8 +174,8 @@ const profileFormPopup = new PopupWithForm('.popup_target_profile',
     })
     .catch((err) => {
       console.log(`Ошибка при сохранении данных профиля пользователя: ${err}!`)
-    }
-  );
+    })
+    .finally(() => changeTextContext(submitProfileButton, prevButtonText));
 
   });
 // устанавливаем слушатели
@@ -185,10 +186,7 @@ const addItemFormPopup = new PopupWithForm('.popup_target_add-item',
   //вторым параметром передаем колбэк сабмита формы, т.к. нужно учесть логику формы
   (formData) => {
 
-    // На время выполнения запроса меняем текст кнопки submit и не закрываем popup
-    const button = document.querySelector('.popup_target_add-item').querySelector('.popup__save-button');
-    const prevButtonText = button.textContent;
-    button.textContent =  'Сохранение...';
+    const prevButtonText = changeTextContext(submitAddItemButton, 'Сохранение...');
 
     // вначале отправим карточку на сервер:
     api.addCard(formData)
@@ -197,30 +195,26 @@ const addItemFormPopup = new PopupWithForm('.popup_target_add-item',
       createCard(user.getUserInfo().user_id, result.owner._id, result._id, result.name, result.link, [], '#card-template', imagePopup);
       // теперь только закрываем окно
       addItemFormPopup.close();
-      button.textContent =  prevButtonText;
-
     })
     // если поймали ошибку
     .catch((err) => {
       console.log(`Ошибка при сохранении карточки: ${err}!`)
-    }
-    );
+    })
+    .finally(() => changeTextContext(submitAddItemButton, prevButtonText));
 });
 
 // устанавливаем слушатели
 addItemFormPopup.setEventListeners();
 
 // создаем экземпляр класса PopupWithForm для подтверждения удаления карточки
-const confirmFormPopup = new PopupWithForm('.popup_target_confirm',
+const confirmFormPopup = new PopupWithConfirmation('.popup_target_confirm',
   //вторым параметром передаем колбэк сабмита формы, т.к. нужно учесть логику работы формы
   () => {
       // идем на сервер
-      api.deleteCard(confirmFormPopup)
+      api.deleteCard(confirmFormPopup.getCardId())
       .then((result) => {
         // удалим элемент из DOM
-        confirmFormPopup.cardElem.remove();
-        // после удаления element лучше занулить
-        confirmFormPopup.cardElem = null;
+        confirmFormPopup.deleteCard();
         // закрываем окно:
         confirmFormPopup.close();
       })
@@ -239,9 +233,7 @@ const editAvatarFormPopup = new PopupWithForm('.popup_target_update-avatar',
   (newAvatar) => {
 
     // На время выполнения запроса меняем текст кнопки submit и не закрываем popup
-    const button = document.querySelector('.popup_target_update-avatar').querySelector('.popup__save-button');
-    const prevButtonText = button.textContent;
-    button.textContent =  'Сохранение...';
+    const prevButtonText = changeTextContext(submitUpdateAvatarButton, 'Сохранение...');
 
     // вначале отправим данные на сервер:
     api.updateAvatar(newAvatar)
@@ -250,14 +242,12 @@ const editAvatarFormPopup = new PopupWithForm('.popup_target_update-avatar',
       user.setUserAvatar(result.avatar);
       // теперь только закрываем окно
       editAvatarFormPopup.close();
-      button.textContent =  prevButtonText;
-
     })
     // если поймали ошибку
     .catch((err) => {
       console.log(`Ошибка при сохранении аватара: ${err}!`)
-    }
-    );
+    })
+    .finally(() => changeTextContext(submitUpdateAvatarButton, prevButtonText));
 }
 );
 

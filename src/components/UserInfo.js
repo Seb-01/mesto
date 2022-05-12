@@ -1,14 +1,13 @@
-import {title} from './constants';
-import {subtitle} from './constants';
-
 /** Класс UserInfo, который отвечает за управление отображением информации о пользователе на странице
  *
  */
  export class UserInfo {
-   constructor(avatarSelector) {
+   constructor(avatarSelector, title, subtitle) {
       this._userName = 'no name';
       this._userAboutSelf = 'no about';
       this._avatarElem = document.querySelector(avatarSelector);
+      this._titleElem = title;
+      this._subtitleElem = subtitle;
     }
 
   /** Публичный метод, который возвращает объект с данными пользователя
@@ -31,8 +30,8 @@ import {subtitle} from './constants';
     this._userId = newProfileData._id;
 
     // обновим данные в разметке
-    title.textContent = this._userName;
-    subtitle.textContent = this._userAboutSelf;
+    this._titleElem.textContent = this._userName;
+    this._subtitleElem.textContent = this._userAboutSelf;
     this._avatarElem.src = this._avatar;
   }
 

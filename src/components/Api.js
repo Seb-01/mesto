@@ -8,24 +8,30 @@ export class Api {
   }
 
 
+  /** Приватный метод, который проверяет ответ от сервера
+   * @param {object} res - значение, переданное resolve (вызывается при успешном запросе) при создании промиса
+   */
+  _checkResponse(res) {
+    if (res.ok) {
+      return res.json();
+    }
+    // если ошибка, отклоняем промис
+    return Promise.reject(`Ошибка выполнении запроса к серверу: ${res.status}`);
+  }
+
   /** Публичный метод для загрузки карточек
    *
    */
   getInitialCards() {
     const request = this._baseUrl + '/cards';
+    // возвращаем промис
     return fetch(request,
       {
         method: "GET",
         headers: this._headers
       })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-
-        // если ошибка, отклоняем промис
-        return Promise.reject(`Ошибка загруки карточек пользователей: ${res.status}`);
-      });
+      // выполнится, если промис исполнен. Аргумент - функция обработчик успешного выполнения промиса
+      .then((res) => this._checkResponse(res));
   }
 
   /** Публичный метод для загрузки пользовательского профиля
@@ -38,35 +44,21 @@ export class Api {
         method: "GET",
         headers: this._headers
       })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-
-        // если ошибка, отклоняем промис
-        return Promise.reject(`Ошибка загруки профиля пользователя: ${res.status}`);
-      });
+      .then((res) => this._checkResponse(res));
    }
 
   /** Публичный метод для удаления карточки
    * @param {object} formPopup - экземпляр popup с подтверждением удаления карточки
    */
-  deleteCard(formPopup) {
-    const request = this._baseUrl + `/cards/${formPopup.cardId}`;
+  deleteCard(cardId) {
+    const request = this._baseUrl + `/cards/${cardId}`;
     // удаляем элемент с сервера
     return fetch(request,
       {
         method: "DELETE",
         headers: this._headers
       })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-
-        // если ошибка, отклоняем промис
-        return Promise.reject(`Ошибка при удалении карточки с сервера: ${res.status}`);
-      });
+      .then((res) => this._checkResponse(res));
    }
 
   /** Публичный метод для добавления карточки
@@ -86,14 +78,7 @@ export class Api {
           link: cardData.link
         })
       })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-
-        // если ошибка, отклоняем промис
-        return Promise.reject(`Ошибка при добавлении карточки на сервер: ${res.status}`);
-      });
+      .then((res) => this._checkResponse(res));
    }
 
   /** Публичный метод для сохранения данных профиля пользователя
@@ -113,14 +98,7 @@ export class Api {
           about: profileData.job
         })
       })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-
-        // если ошибка, отклоняем промис
-        return Promise.reject(`Ошибка при добавлении карточки на сервер: ${res.status}`);
-      });
+      .then((res) => this._checkResponse(res));
    }
 
   /** Публичный метод для Обновления автара в профиле пользователя
@@ -139,14 +117,7 @@ export class Api {
           avatar: newAvatar.link
         })
       })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-
-        // если ошибка, отклоняем промис
-        return Promise.reject(`Ошибка при добавлении карточки на сервер: ${res.status}`);
-      });
+      .then((res) => this._checkResponse(res));
    }
 
   /** Публичный метод для удаления лайка карточки
@@ -160,14 +131,7 @@ export class Api {
         method: "DELETE",
         headers: this._headers
       })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-
-        // если ошибка, отклоняем промис
-        return Promise.reject(`Ошибка при удалении карточки: ${res.status}`);
-      });
+      .then((res) => this._checkResponse(res));
    }
 
      /** Публичный метод для лайка карточки
@@ -181,14 +145,7 @@ export class Api {
         method: "PUT",
         headers: this._headers
       })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-
-        // если ошибка, отклоняем промис
-        return Promise.reject(`Ошибка при лайке карточки: ${res.status}`);
-      });
+      .then((res) => this._checkResponse(res));
    }
 }
 
