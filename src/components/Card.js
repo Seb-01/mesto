@@ -88,8 +88,7 @@ export class Card {
    */
   _handleCardClick(evt) {
     // передаем в popup данные поднимаемой карточки
-    this._popupElem.setCardData(this._text, this._image);
-    this._popupElem.open();
+     this._popupElem.open(this._text, this._image);
   }
 
   /** Функция, которая навешивает слушатели
@@ -118,7 +117,7 @@ export class Card {
     this._cardImage.src = this._image;
     this._cardImage.alt = this._text;
     this._element.querySelector('.elements__title').textContent = this._text;
-    this._element.querySelector('.elements__likes-number').textContent = this._likes.length;
+    this._likeNumberElem.textContent = this._likes.length;
 
     // иконка trash
     if (!this._isTrash)

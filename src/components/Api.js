@@ -31,7 +31,10 @@ export class Api {
         headers: this._headers
       })
       // выполнится, если промис исполнен. Аргумент - функция обработчик успешного выполнения промиса
-      .then((res) => this._checkResponse(res));
+      .then((res) => this._checkResponse(res))
+      .catch((err) => {
+        console.log(`Ошибка при выполнении запросе: ${err}!`)
+      });
   }
 
   /** Публичный метод для загрузки пользовательского профиля
@@ -44,7 +47,10 @@ export class Api {
         method: "GET",
         headers: this._headers
       })
-      .then((res) => this._checkResponse(res));
+      .then((res) => this._checkResponse(res))
+      .catch((err) => {
+        console.log(`Ошибка при выполнении запросе: ${err}!`)
+      });
    }
 
   /** Публичный метод для удаления карточки
@@ -58,7 +64,10 @@ export class Api {
         method: "DELETE",
         headers: this._headers
       })
-      .then((res) => this._checkResponse(res));
+      .then((res) => this._checkResponse(res))
+      .catch((err) => {
+        console.log(`Ошибка при выполнении запросе: ${err}!`)
+      });
    }
 
   /** Публичный метод для добавления карточки
@@ -78,7 +87,10 @@ export class Api {
           link: cardData.link
         })
       })
-      .then((res) => this._checkResponse(res));
+      .then((res) => this._checkResponse(res))
+      .catch((err) => {
+        console.log(`Ошибка при выполнении запросе: ${err}!`)
+      });
    }
 
   /** Публичный метод для сохранения данных профиля пользователя
@@ -98,7 +110,10 @@ export class Api {
           about: profileData.job
         })
       })
-      .then((res) => this._checkResponse(res));
+      .then((res) => this._checkResponse(res))
+      .catch((err) => {
+        console.log(`Ошибка при выполнении запросе: ${err}!`)
+      });
    }
 
   /** Публичный метод для Обновления автара в профиле пользователя
@@ -117,7 +132,10 @@ export class Api {
           avatar: newAvatar.link
         })
       })
-      .then((res) => this._checkResponse(res));
+      .then((res) => this._checkResponse(res))
+      .catch((err) => {
+        console.log(`Ошибка при выполнении запросе: ${err}!`)
+      });
    }
 
   /** Публичный метод для удаления лайка карточки
@@ -131,7 +149,10 @@ export class Api {
         method: "DELETE",
         headers: this._headers
       })
-      .then((res) => this._checkResponse(res));
+      .then((res) => this._checkResponse(res))
+      .catch((err) => {
+        console.log(`Ошибка при выполнении запросе: ${err}!`)
+      });
    }
 
      /** Публичный метод для лайка карточки
@@ -145,7 +166,10 @@ export class Api {
         method: "PUT",
         headers: this._headers
       })
-      .then((res) => this._checkResponse(res));
+      .then((res) => this._checkResponse(res))
+      .catch((err) => {
+        console.log(`Ошибка при выполнении запросе: ${err}!`)
+      });
    }
 }
 

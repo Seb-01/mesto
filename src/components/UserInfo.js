@@ -22,26 +22,17 @@
    * @param {object} newProfileData - данные профиля пользователя
    *
    */
-  setUserInfo(newProfileData) {
+  setUserInfo({ name, about, avatar, _id }) {
     // получили данные с сервера: имя, род занятий и аватар
-    this._userName = newProfileData.name;
-    this._userAboutSelf = newProfileData.about;
-    this._avatar = newProfileData.avatar;
-    this._userId = newProfileData._id;
+    this._userName = name;
+    this._userAboutSelf = about;
+    this._avatar = avatar;
+    this._userId = _id;
 
     // обновим данные в разметке
     this._titleElem.textContent = this._userName;
     this._subtitleElem.textContent = this._userAboutSelf;
     this._avatarElem.src = this._avatar;
   }
-
- /** Публичный метод, для смены аватара
- * @param {object} newAvatar - URL нового аватара
- *
- */
- setUserAvatar(newAvatar) {
-    this._avatar = newAvatar;
-    this._avatarElem.src = this._avatar;
- }
 
 }

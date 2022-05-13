@@ -15,6 +15,10 @@ export class PopupWithForm extends Popup {
     // собственно форма
     // возможно, селектор формы также следует передавать в конструкторе!
     this._form = this._popup.querySelector('.popup__form');
+    // кнопка submit
+    this._submitButton = document.querySelector(popupSelector).querySelector('.popup__save-button');
+    // надпись на кнопке submit
+    this._submitButtonText = this._submitButton.textContent;
  }
 
  /** Приватный метод, который собирает данные всех полей формы
@@ -41,12 +45,29 @@ export class PopupWithForm extends Popup {
 
   this._popup.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    this._handleSubmit(this._getInputValues());
-    //this.close();
+
+    // меняем текст кнопки submit
+    this.renderLoading(true);
+
+    this._handleSubmit(this._getInputValues())
+    .then(() => this.close()) // закрывается попап в `then`
+    .finally(() => this.renderLoading(false)); //возвращаем текст кнопке
+
   });
 
   super.setEventListeners();
  }
+
+ /** Метод, который будет вставлять данные в инпуты
+  *
+  */
+ setInputValues(data) {
+  this._inputList.forEach((input) => {
+    // тут вставляем в `value` инпута данные из объекта по атрибуту `name` этого инпута
+    input.value = data[input.name];
+  });
+}
+
 
  /** Перезаписывает родительский метод close, так как при закрытии попапа форма должна ещё и сбрасываться
   *
@@ -56,6 +77,18 @@ export class PopupWithForm extends Popup {
   this._form.reset();
 
   super.close();
- }
+  }
+
+ /** Метод, который менят текст submit кнопки формы на время запроса данных
+  *
+  * @param {*} isLoading
+  * @param {*} buttonText
+  */
+ renderLoading(isLoading, buttonText='Сохранение...') {
+  if(isLoading)
+    this._submitButton.textContent = buttonText;
+  else
+    this._submitButton.textContent = this._submitButtonText;
+  }
 
 }

@@ -19,16 +19,18 @@
   *
   */
  renderItems() {
-    this._renderedItems.forEach(item => this._renderer(item));
+    this._renderedItems.forEach(item => this.addItem(item));
  }
 
- /** Публичный метод, который принимает DOM-элемент и добавляет его в контейнер
+ /** Публичный метод, создает DOM-элемент и добавляет его в контейнер
   *
   * @param {object} element - новая карточка
   */
- addItem(element) {
-    this._container.prepend(element);
+ addItem(item) {
+  const card = this._renderer(item);
+  this._container.prepend(card);
  }
+
 }
 
 

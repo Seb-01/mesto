@@ -13,25 +13,15 @@ import {Popup} from './Popup.js';
 
  }
 
- /** Метод для установки данных, поднимаемой карточки
-  *
-  * @param {string} cardText
-  * @param {string} cardImage
-  */
- setCardData(cardText, cardImage) {
-  this._cardText = cardText;
-  this._cardImage = cardImage;
- }
-
  /** В методе open класса PopupWithImage нужно вставлять в попап картинку с src изображения и подписью к картинке
   *
   */
- open() {
+ open(cardText, cardImage) {
 
     // сообщаем popup данные картинки, которую поднимаем
-    this._pictureElem.src = this._cardImage;
-    this._pictureElem.alt = this._cardText;
-    this._captionElem.textContent = this._cardText;
+    this._pictureElem.src = cardImage;
+    this._pictureElem.alt = cardText;
+    this._captionElem.textContent = cardText;
 
     super.open()
 

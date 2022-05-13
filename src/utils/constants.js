@@ -28,17 +28,6 @@ export const itemAddButton = document.querySelector('.profile__add-button');
 /** кнопка "обновить аватар" */
 export const avatarEditButton = document.querySelector('.profile__edit-avatar-button');
 
-/** поля input формы редактирования профиля */
-export const nameInput = document.querySelector('.popup__input_field_name');
-export const jobInput = document.querySelector('.popup__input_field_job');
-
 /** поля в разметке профиля */
 export const title = document.querySelector('.profile__title');
 export const subtitle = document.querySelector('.profile__subtitle');
-
-// кнопка submit формы добавления новой карточки
-export const submitAddItemButton = document.querySelector('.popup_target_add-item').querySelector('.popup__save-button');
-// кнопка submit формы обновления аватара
-export const submitUpdateAvatarButton = document.querySelector('.popup_target_update-avatar').querySelector('.popup__save-button');
-// кнопка submit формы обновления профиля
-export const submitProfileButton = document.querySelector('.popup_target_profile').querySelector('.popup__save-button');
